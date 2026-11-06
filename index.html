@@ -112,7 +112,7 @@
             to { transform: scale(1.3); opacity: var(--target-opacity, 0.85); filter: drop-shadow(0 0 4px #fff); } 
         }
 
-        /* 별똥별 */
+        /* 별똥별 (화면 전역 랜덤 분산) */
         .shooting-star {
             position: absolute;
             display: none;
@@ -295,7 +295,7 @@
         .btn-icon-custom:active { transform: scale(0.95) translateY(0); }
         .btn-icon-custom svg { width: 16px; height: 16px; fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* [뽀모도로 트래커 라인: 바탕 박스 제거 & 좌우 여백 배치] */
+        /* [뽀모도로 트래커 라인: 실선 테두리 유지 & N/목표 격리] */
         .pomo-tracker-bar {
             display: flex;
             align-items: center;
@@ -326,7 +326,7 @@
             transition: transform 0.2s ease, filter 0.2s ease;
         }
         .pomo-star-icon.filled {
-            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.9));
+            filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.9));
             animation: starPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         @keyframes starPop {
@@ -340,12 +340,13 @@
             font-weight: 800;
             color: #ffffff;
             letter-spacing: 0.5px;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
             white-space: nowrap;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+            transition: color 0.2s;
         }
         .pomo-count-text.max-achieved {
             color: #ffd700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.9);
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.8) !important;
             animation: goalGlow 1.8s infinite alternate ease-in-out;
         }
         @keyframes goalGlow {
@@ -369,11 +370,11 @@
             transition: background-color 0.25s ease, border-color 0.25s ease;
             cursor: pointer;
             flex-shrink: 0;
+            box-shadow: none !important;
         }
         .pomo-toggle-switch.active {
             background-color: #6A55C9;
             border-color: #8E79E7;
-            box-shadow: 0 0 8px rgba(106, 85, 201, 0.6);
         }
 
         .pomo-toggle-knob {
@@ -384,14 +385,14 @@
             position: absolute;
             top: 2px;
             left: 2px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
             transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .pomo-toggle-switch.active .pomo-toggle-knob {
             transform: translateX(16px);
         }
 
-        /* [To-Do 버튼 & 서랍: 최하단 고정] */
+        /* [To-Do 버튼 & 서랍] */
         .todo-toggle-btn {
             background-color: rgba(255, 255, 255, 0.25); 
             border: 1px solid rgba(255, 255, 255, 0.3); 
@@ -562,6 +563,8 @@
             margin: 0;
             letter-spacing: -0.3px;
         }
+        
+        /* 닫기 (X) 버튼 빨간색 반짝임 효과 */
         .settings-close-btn {
             background: none;
             border: none;
@@ -570,9 +573,10 @@
             cursor: pointer;
             line-height: 1;
             padding: 0 4px;
-            transition: color 0.15s;
+            transition: color 0.15s, transform 0.1s;
         }
         .settings-close-btn:hover { color: #111111; }
+        .settings-close-btn:active { color: #ff4d4f !important; transform: scale(0.9); }
 
         .settings-section-title {
             font-size: 15px;
@@ -632,7 +636,6 @@
             margin-right: 4px;
         }
 
-        /* [목표 카테고리 스타일] */
         .settings-goal-box {
             display: flex;
             align-items: center;
@@ -665,10 +668,197 @@
             user-select: none;
         }
 
-        /* [좌측 하단 전체화면 버튼] */
-        .fullscreen-btn {
+        /* [통계 대시보드 모달] */
+        .stats-modal-box {
+            background-color: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 26px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            width: 440px;
+            max-width: 92vw;
+            max-height: 85vh;
+            padding: 22px 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transform: scale(0.92) translateY(10px);
+            transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+            color: #222222;
+            overflow-y: auto;
+        }
+        .settings-modal-overlay.show .stats-modal-box {
+            transform: scale(1) translateY(0);
+        }
+
+        .stats-summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .stats-card {
+            background: rgba(245, 246, 250, 0.85);
+            border: 1px solid rgba(106, 85, 201, 0.12);
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .stats-card-label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #666666;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .stats-card-val {
+            font-size: 24px;
+            font-weight: 900;
+            color: #111111;
+            letter-spacing: -0.5px;
+        }
+
+        .stats-section-box {
+            background: rgba(245, 246, 250, 0.85);
+            border: 1px solid rgba(106, 85, 201, 0.12);
+            border-radius: 16px;
+            padding: 14px 14px 10px 14px;
+            margin-bottom: 14px;
+            position: relative;
+        }
+        .stats-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .stats-section-heading {
+            font-size: 14.5px;
+            font-weight: 800;
+            color: #333333;
+        }
+        .stats-pill-group {
+            display: flex;
+            background: rgba(0, 0, 0, 0.06);
+            border-radius: 12px;
+            padding: 2px;
+            gap: 2px;
+        }
+        .stats-pill-btn {
+            font-family: inherit;
+            border: none;
+            background: transparent;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 10px;
+            color: #666666;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .stats-pill-btn.active {
+            background: #ffffff;
+            color: #6A55C9;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+
+        /* [활동 시간: 직선형 꺾은선 + 그라데이션 면적] */
+        .line-chart-wrapper {
+            width: 100%;
+            height: 130px;
+            position: relative;
+        }
+        .line-chart-svg {
+            width: 100%;
+            height: 105px;
+            overflow: visible;
+        }
+        .chart-axis-labels-container {
+            width: 100%;
+            height: 20px;
+            position: relative;
+            margin-top: 2px;
+        }
+        .chart-axis-label-item {
+            position: absolute;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #888888;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* [가장 잘 집중하는 시간대: 24시간 막대 차트 (경계선 축 정렬)] */
+        .hourly-chart-wrapper {
+            width: 100%;
+            height: 80px;
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            padding-bottom: 4px;
+            position: relative;
+        }
+        .hourly-bar-col {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            cursor: pointer;
+        }
+        .hourly-bar {
+            width: 100%;
+            background: #6A55C9;
+            border-radius: 2px 2px 0 0;
+            min-height: 2px;
+            transition: background 0.2s, height 0.3s;
+        }
+        .hourly-bar.empty {
+            background: rgba(0, 0, 0, 0.06);
+            height: 2px !important;
+        }
+        .hourly-bar-col:hover .hourly-bar:not(.empty) {
+            background: #8E79E7;
+        }
+        .hourly-axis-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #888888;
+            font-weight: bold;
+            padding: 0 2px;
+            margin-top: 4px;
+        }
+
+        /* [차트 호버/터치 툴팁 (Sticky 모바일 고정 지원)] */
+        .chart-tooltip {
+            position: absolute;
+            background: rgba(15, 27, 49, 0.95);
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 5px 9px;
+            border-radius: 6px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            transform: translate(-50%, -125%);
+            white-space: nowrap;
+            z-index: 2600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+        }
+        .chart-tooltip.show {
+            opacity: 1;
+        }
+
+        /* [좌측/우측 하단 원형 버튼] */
+        .bottom-action-btn {
             position: fixed; 
-            left: 20px; 
             bottom: 20px; 
             width: 42px; 
             height: 42px; 
@@ -685,11 +875,16 @@
             z-index: 100;
             transition: all 0.2s ease;
             -webkit-tap-highlight-color: transparent;
+            padding: 0;
+            flex-shrink: 0;
         }
-        .fullscreen-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08); }
-        .fullscreen-btn svg { width: 20px; height: 20px; fill: none; stroke: #ffffff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+        .bottom-action-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08); }
+        .bottom-action-btn svg { width: 20px; height: 20px; fill: none; stroke: #ffffff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* [우측 상단 액션 버튼 (비율 찌그러짐 원천 차단)] */
+        .fullscreen-btn { left: 20px; }
+        .stats-btn { right: 20px; }
+
+        /* [우측 상단 액션 버튼] */
         .top-action-btn {
             position: fixed;
             top: 20px;
@@ -725,6 +920,7 @@
 
         @media (min-width: 601px) {
             .fullscreen-btn { left: 32px; bottom: 32px; }
+            .stats-btn { right: 32px; bottom: 32px; }
             .top-action-btn { top: 32px; }
             .settings-btn { right: 32px; }
             .mute-btn { right: 84px; }
@@ -741,7 +937,7 @@
         <svg id="mute-icon" viewBox="0 0 24 24"></svg>
     </button>
 
-    <!-- 우측 상단 설정 버튼 (완벽한 원형/아이콘 비율 보장) -->
+    <!-- 우측 상단 설정 버튼 -->
     <button class="top-action-btn settings-btn" id="settings-toggle-btn" onclick="openSettings()" title="설정">
         <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"></circle>
@@ -792,7 +988,7 @@
                 </button>
             </div>
 
-            <!-- 뽀모도로 게이지 바 (배경 박스 없이 세련된 좌우 분리) -->
+            <!-- 뽀모도로 게이지 바 -->
             <div class="pomo-tracker-bar">
                 <div class="pomo-left-group">
                     <div class="pomo-stars-group" id="pomo-stars-box"></div>
@@ -837,7 +1033,6 @@
             <div class="settings-section-title">⏱ 시간</div>
             
             <div class="settings-time-list">
-                <!-- Focus -->
                 <div class="settings-time-row">
                     <span class="settings-mode-label">Focus</span>
                     <div class="settings-inputs-wrapper">
@@ -848,7 +1043,6 @@
                     </div>
                 </div>
 
-                <!-- Short Break -->
                 <div class="settings-time-row">
                     <span class="settings-mode-label">Short</span>
                     <div class="settings-inputs-wrapper">
@@ -859,7 +1053,6 @@
                     </div>
                 </div>
 
-                <!-- Long Break -->
                 <div class="settings-time-row">
                     <span class="settings-mode-label">Long</span>
                     <div class="settings-inputs-wrapper">
@@ -871,7 +1064,6 @@
                 </div>
             </div>
 
-            <!-- 목표 카테고리 -->
             <div class="settings-section-title">🎯 목표</div>
             <div class="settings-goal-box">
                 <span>오늘의 목표</span>
@@ -888,21 +1080,81 @@
         </div>
     </div>
 
+    <!-- 통계 대시보드 모달 -->
+    <div class="settings-modal-overlay" id="stats-modal" onclick="handleStatsOverlayClick(event)">
+        <div class="stats-modal-box" id="stats-modal-box">
+            <div class="settings-modal-header">
+                <h3 class="settings-modal-title">통계 대시보드</h3>
+                <button class="settings-close-btn" onclick="closeStats()">&times;</button>
+            </div>
+
+            <!-- 요약 카드 2종 -->
+            <div class="stats-summary-grid">
+                <div class="stats-card">
+                    <div class="stats-card-label">🔥 활동 일수</div>
+                    <div class="stats-card-val" id="stats-active-days-val">0일</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-card-label">⌛ 하루 평균</div>
+                    <div class="stats-card-val" id="stats-daily-avg-val">0m</div>
+                </div>
+            </div>
+
+            <!-- 활동 시간 (직선형 꺾은선 + 그라데이션) -->
+            <div class="stats-section-box">
+                <div class="stats-section-header">
+                    <span class="stats-section-heading">활동 시간</span>
+                    <div class="stats-pill-group">
+                        <button class="stats-pill-btn active" id="btn-chart-7d" onclick="switchChartRange(7)">7일</button>
+                        <button class="stats-pill-btn" id="btn-chart-30d" onclick="switchChartRange(30)">30일</button>
+                    </div>
+                </div>
+                <div class="line-chart-wrapper" id="line-chart-container">
+                    <svg class="line-chart-svg" id="line-chart-svg"></svg>
+                    <div class="chart-axis-labels-container" id="line-axis-labels-container"></div>
+                </div>
+            </div>
+
+            <!-- 가장 잘 집중하는 시간대 (막대 그래프) -->
+            <div class="stats-section-box" style="margin-bottom: 0;">
+                <div class="stats-section-header">
+                    <span class="stats-section-heading">가장 잘 집중하는 시간대</span>
+                </div>
+                <div class="hourly-chart-wrapper" id="hourly-chart-box"></div>
+                <div class="hourly-axis-labels">
+                    <span>0시</span>
+                    <span>6시</span>
+                    <span>12시</span>
+                    <span>18시</span>
+                    <span>24시</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 차트 호버/터치 툴팁 (Sticky 고정) -->
+    <div class="chart-tooltip" id="chart-tooltip"></div>
+
     <!-- 좌측 하단 전체화면 버튼 -->
-    <button class="fullscreen-btn" id="fullscreen-toggle-btn" onclick="toggleFullScreen()" title="전체화면 전환">
+    <button class="bottom-action-btn fullscreen-btn" id="fullscreen-toggle-btn" onclick="toggleFullScreen()" title="전체화면 전환">
         <svg id="fs-icon" viewBox="0 0 24 24">
             <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
         </svg>
     </button>
 
+    <!-- 우측 하단 통계 대시보드 버튼 -->
+    <button class="bottom-action-btn stats-btn" id="stats-open-btn" onclick="openStats()" title="통계 대시보드">
+        <svg viewBox="0 0 24 24">
+            <path d="M18 20V10M12 20V4M6 20v-6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
     <script>
-        /* [더블클릭 / 더블탭 줌 전역 차단] */
+        /* 전역 더블클릭/더블탭 줌 차단 */
         let lastTouchTimeGlobal = 0;
         document.addEventListener('touchend', function(e) {
             const now = Date.now();
-            if (now - lastTouchTimeGlobal <= 320) {
-                e.preventDefault();
-            }
+            if (now - lastTouchTimeGlobal <= 320) e.preventDefault();
             lastTouchTimeGlobal = now;
         }, { passive: false });
 
@@ -959,8 +1211,6 @@
         }
 
         let modeSettings = getInitialModeSettings();
-
-        // 목표 주기 설정 (기본값: 10)
         let targetCycleGoal = parseInt(localStorage.getItem(`potato-target-goal-${userId}`), 10) || 10;
 
         let currentMode = 'focus'; 
@@ -974,7 +1224,7 @@
         
         const totalLength = 345.57; 
 
-        /* 뽀모도로 게이지 & 자동 순환 상태 */
+        /* 뽀모도로 게이지 & 자동 순환 */
         let pomoStars = parseInt(localStorage.getItem(`potato-pomo-stars-${userId}`), 10) || 0;
         let pomoCycleCount = parseInt(localStorage.getItem(`potato-pomo-cycles-${userId}`), 10) || 0;
         let isAutoPomo = localStorage.getItem(`potato-auto-pomo-${userId}`) === 'true';
@@ -1003,9 +1253,13 @@
         const mainContentBox = document.getElementById('main-content-box');
         const muteIcon = document.getElementById('mute-icon');
         const settingsModal = document.getElementById('settings-modal');
+        const statsModal = document.getElementById('stats-modal');
         const pomoStarsBox = document.getElementById('pomo-stars-box');
         const pomoCycleCounter = document.getElementById('pomo-cycle-counter');
         const pomoAutoSwitch = document.getElementById('pomo-auto-switch');
+        const chartTooltip = document.getElementById('chart-tooltip');
+
+        let isTooltipPinned = false; // 모바일/태블릿 터치 시 툴팁 고정용
 
         /* [음소거 로직] */
         let isMuted = localStorage.getItem(`potato-muted-${userId}`) === 'true';
@@ -1034,7 +1288,7 @@
             updateMuteDisplay();
         }
 
-        /* [뽀모도로 트래커 렌더링 (1:1 비율 별 & N/목표)] */
+        /* [뽀모도로 트래커: 실선 테두리 유지 + 내부 황금빛 채움] */
         function renderPomoTracker() {
             pomoStarsBox.innerHTML = '';
             for (let i = 0; i < 4; i++) {
@@ -1044,16 +1298,21 @@
                 starSvg.setAttribute("class", `pomo-star-icon ${isFilled ? 'filled' : ''}`);
 
                 if (isFilled) {
-                    starSvg.innerHTML = `<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#ffd700" stroke="#ffae00" stroke-width="1.2" stroke-linejoin="round"/>`;
+                    starSvg.innerHTML = `
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" 
+                            fill="#ffd700" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round"/>
+                    `;
                 } else {
-                    starSvg.innerHTML = `<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.8" stroke-dasharray="2.8 2.8" stroke-linejoin="round"/>`;
+                    starSvg.innerHTML = `
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" 
+                            fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.6" stroke-linejoin="round"/>
+                    `;
                 }
                 pomoStarsBox.appendChild(starSvg);
             }
 
             pomoCycleCounter.textContent = `${pomoCycleCount}/${targetCycleGoal}`;
             
-            // 목표 달성 및 초과 시 반짝임 효과
             if (pomoCycleCount >= targetCycleGoal) {
                 pomoCycleCounter.classList.add('max-achieved');
             } else {
@@ -1143,10 +1402,13 @@
         let lastSavedDate = localStorage.getItem(`potato-last-date-${userId}`) || "";
         let isSyncingFromCloud = false;
 
+        let focusHistory = safeGetJSON(`potato-history-${userId}`, {});
+
         function saveState() {
             localStorage.setItem(`potato-todos-${userId}`, JSON.stringify(todos));
             localStorage.setItem(`potato-focus-seconds-${userId}`, accumulatedFocusSeconds.toString());
             localStorage.setItem(`potato-last-date-${userId}`, lastSavedDate);
+            localStorage.setItem(`potato-history-${userId}`, JSON.stringify(focusHistory));
 
             if (isCloudSyncActive && db && !isSyncingFromCloud) {
                 db.collection("users").doc(userId).set({
@@ -1156,6 +1418,7 @@
                     pomoStars: pomoStars,
                     pomoCycleCount: pomoCycleCount,
                     targetCycleGoal: targetCycleGoal,
+                    focusHistory: focusHistory,
                     updatedAt: Date.now()
                 }, { merge: true }).catch(err => console.error("Firestore Save Error:", err));
             }
@@ -1169,13 +1432,12 @@
                     const data = doc.data();
                     isSyncingFromCloud = true;
                     if (data.todos) todos = data.todos;
-                    if (typeof data.accumulatedFocusSeconds === 'number') {
-                        accumulatedFocusSeconds = data.accumulatedFocusSeconds;
-                    }
+                    if (typeof data.accumulatedFocusSeconds === 'number') accumulatedFocusSeconds = data.accumulatedFocusSeconds;
                     if (data.lastSavedDate) lastSavedDate = data.lastSavedDate;
                     if (typeof data.pomoStars === 'number') pomoStars = data.pomoStars;
                     if (typeof data.pomoCycleCount === 'number') pomoCycleCount = data.pomoCycleCount;
                     if (typeof data.targetCycleGoal === 'number') targetCycleGoal = data.targetCycleGoal;
+                    if (data.focusHistory) focusHistory = data.focusHistory;
 
                     localStorage.setItem(`potato-todos-${userId}`, JSON.stringify(todos));
                     localStorage.setItem(`potato-focus-seconds-${userId}`, accumulatedFocusSeconds.toString());
@@ -1183,6 +1445,7 @@
                     localStorage.setItem(`potato-pomo-stars-${userId}`, pomoStars.toString());
                     localStorage.setItem(`potato-pomo-cycles-${userId}`, pomoCycleCount.toString());
                     localStorage.setItem(`potato-target-goal-${userId}`, targetCycleGoal.toString());
+                    localStorage.setItem(`potato-history-${userId}`, JSON.stringify(focusHistory));
 
                     renderTodos();
                     updateStatsDisplay();
@@ -1205,12 +1468,16 @@
         let starTimeoutId = null;
         let slowDownSteps = 0;
 
+        /* [별똥별 전역 분산 발생 로직] */
         function triggerShootingStar() {
             const screenW = window.innerWidth || 800;
-            const startX = Math.floor(Math.random() * (screenW * 0.7)); 
-            const startY = Math.floor(Math.random() * 80); 
-            const diagonalMove = Math.floor(Math.random() * 250) + 300; 
-            const starLen = Math.floor(Math.random() * 40) + 65; 
+            const screenH = window.innerHeight || 600;
+            
+            // 화면 전역(가로 85%, 세로 70%) 군데군데에서 랜덤하게 시작
+            const startX = Math.floor(Math.random() * (screenW * 0.85)); 
+            const startY = Math.floor(Math.random() * (screenH * 0.7)); 
+            const diagonalMove = Math.floor(Math.random() * 250) + 260; 
+            const starLen = Math.floor(Math.random() * 45) + 60; 
 
             starElement.style.setProperty('--move-x', `${diagonalMove}px`);
             starElement.style.setProperty('--move-y', `${diagonalMove}px`);
@@ -1218,7 +1485,7 @@
             starElement.style.left = `${startX}px`;
             starElement.style.top = `${startY}px`;
             
-            const duration = (Math.random() * 0.23 + 0.3).toFixed(2);
+            const duration = (Math.random() * 0.25 + 0.32).toFixed(2);
             
             starElement.style.display = 'block';
             starElement.style.animation = `shoot ${duration}s linear forwards`;
@@ -1356,31 +1623,49 @@
             }, 50);
         }
 
-        function getFormattedDate() {
+        function getFormattedDate(d = new Date()) {
             const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            const d = new Date();
             return `${days[d.getDay()]} ${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
         }
 
-        /* [자정 스마트 리셋 로직: 2시간 유예] */
+        function getDateKey(d = new Date()) {
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        /* [자정 스마트 리셋 로직: 투두는 자정 즉시 삭제 / 집중시간·별은 2시간 유예] */
         function checkMidnightReset() {
             const todayStr = getFormattedDate();
+            
             if (lastSavedDate !== todayStr && lastSavedDate !== "") {
+                // 1. 완료된 투두는 타이머 구동 여부와 무관하게 자정 즉시 삭제
+                const prevTodoCount = todos.length;
+                todos = todos.filter(t => !t.completed);
+                if (todos.length !== prevTodoCount) {
+                    renderTodos();
+                }
+
+                // 2. 집중 세션 보호 (타이머 구동 중이거나 2시간 이내 활동 시 유예)
                 const now = Date.now();
                 const idleDuration = now - lastActiveTime;
                 const isOverTwoHoursIdle = idleDuration >= (2 * 60 * 60 * 1000);
 
-                if (!isTimerRunning && isOverTwoHoursIdle) {
-                    todos = todos.filter(t => !t.completed);
-                    accumulatedFocusSeconds = 0;
-                    pomoStars = 0;
-                    pomoCycleCount = 0;
-                    lastSavedDate = todayStr;
-                    savePomoState();
-                    renderTodos();
-                    renderPomoTracker();
+                if (isTimerRunning || !isOverTwoHoursIdle) {
+                    statsDateEl.textContent = todayStr;
+                    saveState();
+                    return;
                 }
+
+                // 3. 2시간 이상 비활성 시 집중 시간 & 별 게이지 최종 리셋
+                accumulatedFocusSeconds = 0;
+                pomoStars = 0;
+                pomoCycleCount = 0;
+                lastSavedDate = todayStr;
+                savePomoState();
+                renderPomoTracker();
             } else {
                 lastSavedDate = todayStr;
                 saveState();
@@ -1429,6 +1714,21 @@
 
         let lastFocusSaveTime = 0;
 
+        function recordFocusTime(seconds) {
+            const dateKey = getDateKey();
+            const hour = new Date().getHours();
+
+            if (!focusHistory[dateKey]) {
+                focusHistory[dateKey] = {
+                    totalSeconds: 0,
+                    hourly: new Array(24).fill(0)
+                };
+            }
+
+            focusHistory[dateKey].totalSeconds += seconds;
+            focusHistory[dateKey].hourly[hour] = (focusHistory[dateKey].hourly[hour] || 0) + seconds;
+        }
+
         function timerLoop(timestamp) {
             if (!isTimerRunning) return;
             if (!lastTimestamp) lastTimestamp = timestamp;
@@ -1442,6 +1742,7 @@
 
             if (currentMode === 'focus') {
                 accumulatedFocusSeconds += elapsedSeconds;
+                recordFocusTime(elapsedSeconds);
                 updateStatsDisplay();
 
                 if (Date.now() - lastFocusSaveTime > 10000) {
@@ -1484,7 +1785,6 @@
             }
         }
 
-        /* [Reset 시 별 게이지는 유지하고 현재 회차 시간만 복원] */
         function resetTimer() {
             updateLastActive();
             isTimerRunning = false;
@@ -1504,7 +1804,6 @@
             resetTimer();
         }
 
-        /* [수동 탭 전환: 사용자가 탭을 누르면 오토 토글 OFF] */
         function handleManualTabChange(mode) {
             updateLastActive();
             if (isAutoPomo) {
@@ -1537,7 +1836,6 @@
             }, 350);
         }
 
-        /* [완료 버튼 클릭: 별 적립 판정 & 자동 연속 순환] */
         function closeCustomAlert() {
             updateLastActive();
             customAlert.classList.remove('show');
@@ -1545,7 +1843,6 @@
 
             const completedMode = currentMode;
 
-            // 포커스 세션 완주 시 별 게이지 적립 (단일 텀 25분 이상 기준)
             if (completedMode === 'focus') {
                 const setting = modeSettings.focus;
                 const plannedSeconds = setting.min * 60 + setting.sec;
@@ -1557,7 +1854,6 @@
                         pomoStars = 1;
                     }
 
-                    // 4개 완성 시 주기 카운트 1 증가
                     if (pomoStars === 4) {
                         pomoCycleCount++;
                     }
@@ -1566,7 +1862,6 @@
                 }
             }
 
-            // 자동 순환(Auto Pomo) 활성화 여부에 따른 분기
             if (isAutoPomo) {
                 if (completedMode === 'focus') {
                     if (pomoStars === 4) {
@@ -1615,8 +1910,6 @@
             document.getElementById('input-short-sec').value = String(modeSettings.short.sec).padStart(2, '0');
             document.getElementById('input-long-min').value = String(modeSettings.long.min).padStart(2, '0');
             document.getElementById('input-long-sec').value = String(modeSettings.long.sec).padStart(2, '0');
-            
-            // 목표 주기 설정값 채우기
             document.getElementById('input-target-cycles').value = String(targetCycleGoal);
 
             const isSavePermanent = localStorage.getItem(`potato-save-default-${userId}`) === 'true';
@@ -1632,9 +1925,7 @@
         }
 
         function handleSettingsOverlayClick(event) {
-            if (event.target === settingsModal) {
-                closeSettings();
-            }
+            if (event.target === settingsModal) closeSettings();
         }
 
         function closeSettings() {
@@ -1678,9 +1969,282 @@
             settingsModal.classList.remove('show');
 
             renderPomoTracker();
+            if (hasChanged) resetTimer();
+        }
 
-            if (hasChanged) {
-                resetTimer();
+        /* [통계 대시보드 로직 (Sticky 툴팁 및 꺾은선/막대 차트 정밀 정렬)] */
+        let currentChartRange = 7;
+
+        function openStats() {
+            updateLastActive();
+            renderStatsDashboard();
+            statsModal.classList.add('show');
+        }
+
+        function handleStatsOverlayClick(event) {
+            if (event.target === statsModal) closeStats();
+        }
+
+        function closeStats() {
+            statsModal.classList.remove('show');
+            hideTooltip();
+        }
+
+        function switchChartRange(range) {
+            currentChartRange = range;
+            document.getElementById('btn-chart-7d').classList.toggle('active', range === 7);
+            document.getElementById('btn-chart-30d').classList.toggle('active', range === 30);
+            renderLineActivityChart();
+        }
+
+        function showTooltip(e, text) {
+            isTooltipPinned = true;
+            chartTooltip.textContent = text;
+            chartTooltip.classList.add('show');
+            positionTooltip(e);
+        }
+
+        function positionTooltip(e) {
+            if (!isTooltipPinned && e.type !== 'touchstart' && e.type !== 'click') return;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            chartTooltip.style.left = `${clientX}px`;
+            chartTooltip.style.top = `${clientY}px`;
+        }
+
+        function hideTooltip() {
+            isTooltipPinned = false;
+            chartTooltip.classList.remove('show');
+        }
+
+        // 차트 바깥 영역이나 빈 곳 누르면 툴팁 해제
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('circle') && !e.target.closest('.hourly-bar-col')) {
+                hideTooltip();
+            }
+        });
+
+        function formatMinutesToHours(min) {
+            if (min >= 60) {
+                const h = Math.floor(min / 60);
+                const m = min % 60;
+                return `${h}시간 ${m}분`;
+            }
+            return `${min}분`;
+        }
+
+        function renderStatsDashboard() {
+            let activeDaysCount = 0;
+            let totalFocusSecAllTime = 0;
+
+            const allDateKeys = Object.keys(focusHistory);
+            allDateKeys.forEach(dateKey => {
+                const daySec = focusHistory[dateKey].totalSeconds || 0;
+                if (daySec >= 300) {
+                    activeDaysCount++;
+                    totalFocusSecAllTime += daySec;
+                }
+            });
+
+            document.getElementById('stats-active-days-val').textContent = `${activeDaysCount}일`;
+
+            const avgSec = activeDaysCount > 0 ? (totalFocusSecAllTime / activeDaysCount) : 0;
+            const avgMin = Math.floor(avgSec / 60);
+            if (avgMin >= 60) {
+                const h = Math.floor(avgMin / 60);
+                const m = avgMin % 60;
+                document.getElementById('stats-daily-avg-val').textContent = `${h}h ${m}m`;
+            } else {
+                document.getElementById('stats-daily-avg-val').textContent = `${avgMin}m`;
+            }
+
+            renderLineActivityChart();
+            renderHourlyDistributionChart();
+        }
+
+        /* [활동 시간: 점 없는 직선형 꺾은선 + 그라데이션 면적 채움] */
+        function renderLineActivityChart() {
+            const svg = document.getElementById('line-chart-svg');
+            const axisLabelsContainer = document.getElementById('line-axis-labels-container');
+            svg.innerHTML = '';
+            axisLabelsContainer.innerHTML = '';
+
+            const days = currentChartRange;
+            const today = new Date();
+            const dateList = [];
+            const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+
+            for (let i = days - 1; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(d.getDate() - i);
+                const m = d.getMonth() + 1;
+                const dayNum = d.getDate();
+                const w = weekdays[d.getDay()];
+                dateList.push({
+                    dateKey: getDateKey(d),
+                    tooltipDateStr: `${m}/${dayNum}(${w})`,
+                    axisLabelStr: `${m}/${dayNum}(${w})`
+                });
+            }
+
+            let maxSeconds = 60;
+            dateList.forEach(item => {
+                const sec = (focusHistory[item.dateKey] && focusHistory[item.dateKey].totalSeconds) || 0;
+                if (sec > maxSeconds) maxSeconds = sec;
+            });
+
+            const svgWidth = svg.clientWidth || 380;
+            const svgHeight = 105;
+            const padLeft = 14;
+            const padRight = 14;
+            const padTop = 15;
+            const padBottom = 15;
+            const chartW = svgWidth - padLeft - padRight;
+            const chartH = svgHeight - padTop - padBottom;
+
+            const points = dateList.map((item, idx) => {
+                const sec = (focusHistory[item.dateKey] && focusHistory[item.dateKey].totalSeconds) || 0;
+                const x = padLeft + (chartW / (days - 1)) * idx;
+                const y = padTop + chartH - (sec / maxSeconds) * chartH;
+                return { x, y, item, sec };
+            });
+
+            // 1. 그라데이션 정의 (선 아래 영역 채우기)
+            const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+            const linearGrad = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+            linearGrad.setAttribute("id", "lineAreaGrad");
+            linearGrad.setAttribute("x1", "0%");
+            linearGrad.setAttribute("y1", "0%");
+            linearGrad.setAttribute("x2", "0%");
+            linearGrad.setAttribute("y2", "100%");
+
+            const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+            stop1.setAttribute("offset", "0%");
+            stop1.setAttribute("stop-color", "#6A55C9");
+            stop1.setAttribute("stop-opacity", "0.38");
+
+            const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+            stop2.setAttribute("offset", "100%");
+            stop2.setAttribute("stop-color", "#6A55C9");
+            stop2.setAttribute("stop-opacity", "0.0");
+
+            linearGrad.appendChild(stop1);
+            linearGrad.appendChild(stop2);
+            defs.appendChild(linearGrad);
+            svg.appendChild(defs);
+
+            // 2. 직선 꺾은선 경로 (L 명령어 사용으로 각진 꺾은선 구현)
+            let lineD = `M ${points[0].x} ${points[0].y}`;
+            for (let i = 1; i < points.length; i++) {
+                lineD += ` L ${points[i].x} ${points[i].y}`;
+            }
+
+            // 영역 채우기 경로
+            const bottomY = padTop + chartH;
+            const areaD = `${lineD} L ${points[points.length - 1].x} ${bottomY} L ${points[0].x} ${bottomY} Z`;
+
+            const areaEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            areaEl.setAttribute("d", areaD);
+            areaEl.setAttribute("fill", "url(#lineAreaGrad)");
+            svg.appendChild(areaEl);
+
+            // 꺾은선 실선 그리기
+            const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            pathEl.setAttribute("d", lineD);
+            pathEl.setAttribute("fill", "none");
+            pathEl.setAttribute("stroke", "#6A55C9");
+            pathEl.setAttribute("stroke-width", "2.8");
+            pathEl.setAttribute("stroke-linejoin", "round");
+            svg.appendChild(pathEl);
+
+            // 3. 투명한 인터랙티브 터치 영역 및 툴팁 바인딩
+            points.forEach(pt => {
+                const hitCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                hitCircle.setAttribute("cx", pt.x);
+                hitCircle.setAttribute("cy", pt.y);
+                hitCircle.setAttribute("r", "12"); // 터치 편의를 위한 투명 히트박스
+                hitCircle.setAttribute("fill", "transparent");
+                hitCircle.style.cursor = "pointer";
+
+                const min = Math.floor(pt.sec / 60);
+                const tooltipText = `${pt.item.tooltipDateStr}: ${formatMinutesToHours(min)}`;
+
+                const triggerEvent = (e) => {
+                    e.stopPropagation();
+                    showTooltip(e, tooltipText);
+                };
+
+                hitCircle.addEventListener('mouseenter', (e) => showTooltip(e, tooltipText));
+                hitCircle.addEventListener('mousemove', (e) => positionTooltip(e));
+                hitCircle.addEventListener('click', triggerEvent);
+                hitCircle.addEventListener('touchstart', triggerEvent);
+
+                svg.appendChild(hitCircle);
+            });
+
+            // 4. X축 바닥 날짜 라벨 1:1 수직 정렬 배치
+            if (days === 7) {
+                points.forEach(pt => {
+                    const span = document.createElement('span');
+                    span.className = 'chart-axis-label-item';
+                    span.textContent = pt.item.axisLabelStr;
+                    span.style.left = `${(pt.x / svgWidth) * 100}%`;
+                    axisLabelsContainer.appendChild(span);
+                });
+            } else {
+                // 30일 모드: 7일 간격(또는 0, 7, 14, 21, 28일차)에 해당하는 점 하단에만 라벨 표기
+                points.forEach((pt, idx) => {
+                    if (idx % 7 === 0 || idx === points.length - 1) {
+                        const span = document.createElement('span');
+                        span.className = 'chart-axis-label-item';
+                        span.textContent = pt.item.axisLabelStr;
+                        span.style.left = `${(pt.x / svgWidth) * 100}%`;
+                        axisLabelsContainer.appendChild(span);
+                    }
+                });
+            }
+        }
+
+        /* [가장 잘 집중하는 시간대: 24시간 막대 차트 (Sticky 툴팁)] */
+        function renderHourlyDistributionChart() {
+            const hourlyBox = document.getElementById('hourly-chart-box');
+            hourlyBox.innerHTML = '';
+
+            const hourlyTotals = new Array(24).fill(0);
+            Object.keys(focusHistory).forEach(key => {
+                const arr = focusHistory[key].hourly || [];
+                for (let h = 0; h < 24; h++) {
+                    hourlyTotals[h] += (arr[h] || 0);
+                }
+            });
+
+            const maxHourlySec = Math.max(60, ...hourlyTotals);
+
+            for (let h = 0; h < 24; h++) {
+                const sec = hourlyTotals[h];
+                const min = Math.floor(sec / 60);
+                const col = document.createElement('div');
+                col.className = 'hourly-bar-col';
+
+                const bar = document.createElement('div');
+                bar.className = `hourly-bar ${sec === 0 ? 'empty' : ''}`;
+                const heightPct = Math.max(3, (sec / maxHourlySec) * 95);
+                bar.style.height = `${heightPct}%`;
+
+                const tooltipText = `${h}시 ~ ${h + 1}시: 총 ${formatMinutesToHours(min)}`;
+
+                const triggerEvent = (e) => {
+                    e.stopPropagation();
+                    showTooltip(e, tooltipText);
+                };
+
+                col.addEventListener('mouseenter', (e) => showTooltip(e, tooltipText));
+                col.addEventListener('mousemove', (e) => positionTooltip(e));
+                col.addEventListener('click', triggerEvent);
+                col.addEventListener('touchstart', triggerEvent);
+
+                col.appendChild(bar);
+                hourlyBox.appendChild(col);
             }
         }
 
