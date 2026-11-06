@@ -5,11 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Potato Timer</title>
     
-    <!-- Firebase SDK -->
+<!-- Firebase SDK (그대로 유지) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <style>
+        /* 온글잎 나루일기 웹폰트 불러오기 */
+        @font-face {
+            font-family: 'Ownglyph_naruilgi-Rg';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_naruilgi-Rg.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         /* [1부] 미니멀 웹 리셋 및 밤하늘 우주 테마 구조 */
         * { box-sizing: border-box; }
         html, body {
@@ -20,7 +28,8 @@
             padding: 0;
         }
         body {
-            font-family: "국민연금 둥근고딕", "NanumSquareRound", "Nanum Gothic Round", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+            /* 👇 폰트를 온글잎 나루일기로 변경 */
+            font-family: 'Ownglyph_naruilgi-Rg', -apple-system, BlinkMacSystemFont, "NanumSquareRound", sans-serif;
             /* 깃허브 배포 페이지의 원본 이미지 주소를 직접 참조 */
             background-image: url('./night.png'), radial-gradient(circle at 50% 30%, #172554 0%, #0b1424 100%);
             background-size: cover;
@@ -40,6 +49,10 @@
             position: relative;
         }
 
+        /* 버튼 및 텍스트 입력창 서체 통일 */
+        button, input, textarea {
+            font-family: inherit;
+        }
         /* [심우주 은하수 & 성운 레이어] */
         .milky-way-nebula {
             position: absolute;
