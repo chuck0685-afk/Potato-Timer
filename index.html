@@ -21,6 +21,9 @@
 
         * { 
             box-sizing: border-box; 
+            /* 모바일/태블릿 터치 시 생기는 기본 회색 사각형 하이라이트 박스 제거 */
+            -webkit-tap-highlight-color: transparent !important;
+            outline: none;
         }
 
         html, body {
@@ -152,10 +155,17 @@
             transition: transform 0.1s ease;
         }
 
-        /* [태블릿 및 모바일: 투두 제외 전체 1cm 상향 이동] */
-        @media (max-width: 1024px) {
+        /* 모바일에서만 투두 제외 상단 1cm 상향 이동 */
+        @media (max-width: 600px) {
             .viewport-scaler {
-                transform: translateY(-38px); /* 약 1cm 위로 이동 */
+                transform: translateY(-38px);
+            }
+        }
+
+        /* 태블릿은 과하게 올리지 않고 화면 비율에 맞춰 유동적 중앙 정렬 */
+        @media (min-width: 601px) and (max-width: 1024px) {
+            .viewport-scaler {
+                transform: translateY(-8px);
             }
         }
 
@@ -197,6 +207,7 @@
             font-size: 16px; font-weight: bold; padding: 0; width: 85px; height: 40px;
             cursor: pointer; border-radius: 20px; color: #333333; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: all 0.2s ease;
             display: flex; align-items: center; justify-content: center; line-height: 1;
+            -webkit-tap-highlight-color: transparent;
         }
         .tab-btn:hover:not(.active) { background-color: rgba(255, 255, 255, 0.9); }
         .tab-btn.active { background-color: #6A55C9; color: #ffffff; box-shadow: 0 4px 12px rgba(106, 85, 201, 0.5); }
@@ -206,7 +217,7 @@
         
         .adjust-btn { 
             font-family: inherit; 
-            background: none; 
+            background: transparent !important; 
             border: none; 
             color: rgba(255, 255, 255, 0.9); 
             font-size: 2.5rem;
@@ -222,9 +233,11 @@
             transition: transform 0.15s ease, opacity 0.15s; 
             outline: none; 
             touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent !important; /* 모바일 회색 박스 제거 */
+            -webkit-touch-callout: none;
         }
         .adjust-btn:hover { transform: scale(1.2); }
-        .adjust-btn:active { opacity: 0.7; }
+        .adjust-btn:active { opacity: 0.7; transform: scale(1.1); background: transparent !important; }
 
         .timer-container { position: relative; width: 260px; height: 260px; display: flex; align-items: center; justify-content: center; }
         .timer-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
@@ -255,7 +268,18 @@
         }
 
         .controls { display: flex; gap: 20px; align-items: center; justify-content: center; }
-        .btn { font-family: inherit; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.25); transition: all 0.2s ease; line-height: 1; }
+        .btn { 
+            font-family: inherit; 
+            border: none; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.25); 
+            transition: all 0.2s ease; 
+            line-height: 1; 
+            -webkit-tap-highlight-color: transparent;
+        }
         .btn:hover { transform: translateY(-2px); }
         .btn-start { background-color: #6A55C9; color: #ffffff; font-size: 18px; font-weight: bold; padding: 0; width: 110px; height: 46px; border-radius: 23px; transition: background-color 0.2s ease, transform 0.2s ease; }
         .btn-start:hover { background-color: #8E79E7 !important; }
@@ -268,6 +292,7 @@
             transition: background 0.2s, border-color 0.2s, transform 0.2s ease; 
             cursor: pointer;
             z-index: 10;
+            -webkit-tap-highlight-color: transparent;
         }
         .btn-icon-custom:hover { 
             background-color: rgba(255, 255, 255, 0.25); 
@@ -277,7 +302,7 @@
         .btn-icon-custom:active { transform: scale(0.95) translateY(0); }
         .btn-icon-custom svg { width: 16px; height: 16px; fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* [To-Do 서랍 (사파리 하단바/홈바 Safe Area 보정)] */
+        /* [To-Do 서랍 (모바일 / 태블릿 반응형 완벽 보정)] */
         .todo-toggle-btn {
             background-color: rgba(255, 255, 255, 0.25); 
             border: 1px solid rgba(255, 255, 255, 0.3); 
@@ -291,12 +316,13 @@
             border-radius: 20px 20px 0 0; 
             cursor: pointer;
             position: fixed; 
-            bottom: env(safe-area-inset-bottom, 0px); /* 사파리 하단바 위로 정확히 밀착 */
+            bottom: env(safe-area-inset-bottom, 0px); 
             left: 50%; 
             transform: translateX(-50%); 
             transition: bottom 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.2s; 
             box-shadow: 0 -2px 10px rgba(0,0,0,0.15); 
             z-index: 100;
+            -webkit-tap-highlight-color: transparent;
         }
         .todo-toggle-btn:hover { background-color: rgba(255, 255, 255, 0.35); }
         .todo-toggle-btn.drawer-open { 
@@ -305,7 +331,7 @@
 
         .todo-drawer {
             position: fixed; 
-            bottom: -320px; 
+            bottom: -330px; 
             left: 50%; 
             transform: translateX(-50%); 
             width: 360px; 
@@ -327,6 +353,18 @@
             bottom: 0; 
         }
 
+        /* 태블릿 전용 투두 서랍 최적화 */
+        @media (min-width: 601px) and (max-width: 1024px) {
+            .todo-drawer {
+                width: 440px;
+                height: 300px;
+                bottom: -340px;
+            }
+            .todo-toggle-btn.drawer-open {
+                bottom: calc(300px + env(safe-area-inset-bottom, 0px));
+            }
+        }
+
         .todo-form { display: flex; gap: 8px; margin-bottom: 12px; align-items: flex-end; }
         
         .todo-input { 
@@ -334,12 +372,13 @@
             border: none; padding: 9px 12px; border-radius: 12px; font-size: 14px; color: #222222; outline: none;
             resize: none; height: 38px; line-height: 20px; max-height: 80px; box-sizing: border-box;
             display: block;
+            -webkit-tap-highlight-color: transparent;
         }
         .todo-input::placeholder {
             line-height: 20px;
             color: #666666;
         }
-        .todo-add-btn { font-family: inherit; background-color: #6A55C9; color: white; border: none; height: 38px; padding: 0 16px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .todo-add-btn { font-family: inherit; background-color: #6A55C9; color: white; border: none; height: 38px; padding: 0 16px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; transition: background 0.2s; -webkit-tap-highlight-color: transparent; }
         .todo-add-btn:hover { background-color: #8E79E7; }
         
         .todo-list { list-style: none; padding: 0; margin: 0; flex: 1; overflow-y: auto; user-select: text; -webkit-user-select: text;}
@@ -368,7 +407,7 @@
         .todo-drag-handle svg { width: 14px; height: 14px; fill: currentColor; }
         .todo-item.completed .todo-drag-handle { display: none; }
 
-        .todo-del-btn { background: none; border: none; color: rgba(255, 255, 255, 0.6); font-size: 18px; cursor: pointer; padding: 0 4px; transition: color 0.15s; flex-shrink: 0; line-height: 1; margin-top: 1px; }
+        .todo-del-btn { background: none; border: none; color: rgba(255, 255, 255, 0.6); font-size: 18px; cursor: pointer; padding: 0 4px; transition: color 0.15s; flex-shrink: 0; line-height: 1; margin-top: 1px; -webkit-tap-highlight-color: transparent; }
         .todo-del-btn:hover { color: #ff5b5b; }
 
         /* [완료 모달] */
@@ -414,7 +453,7 @@
             text-align: center; 
             letter-spacing: -0.2px;
         }
-        .custom-alert-btn { background-color: #6A55C9; color: white; border: none; padding: 11px 36px; font-size: 14px; font-weight: bold; border-radius: 16px; cursor: pointer; transition: background 0.2s; }
+        .custom-alert-btn { background-color: #6A55C9; color: white; border: none; padding: 11px 36px; font-size: 14px; font-weight: bold; border-radius: 16px; cursor: pointer; transition: background 0.2s; -webkit-tap-highlight-color: transparent; }
         .custom-alert-btn:hover { background-color: #8E79E7; }
 
         /* [좌측 하단 전체화면 버튼] */
@@ -436,11 +475,12 @@
             justify-content: center; 
             z-index: 100;
             transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
         }
         .fullscreen-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08); }
         .fullscreen-btn svg { width: 20px; height: 20px; fill: none; stroke: #ffffff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* [우측 상단 버튼 공통 (음소거 버튼 & 설정 버튼)] */
+        /* [우측 상단 액션 버튼] */
         .top-action-btn {
             position: fixed;
             top: 20px;
@@ -458,12 +498,13 @@
             justify-content: center;
             z-index: 100;
             transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
         }
         .top-action-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08); }
         .top-action-btn svg { width: 20px; height: 20px; fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
         .settings-btn { right: 20px; }
-        .mute-btn { right: 68px; } /* 설정 바로 왼쪽 배치 */
+        .mute-btn { right: 68px; }
     </style>
 </head>
 <body>
@@ -471,10 +512,9 @@
     <div class="ambient-stars-container" id="ambient-container"></div>
     <div class="shooting-star" id="shooting-star-element"></div>
 
-    <!-- 우측 상단 음소거 버튼 (설정 바로 왼쪽) -->
+    <!-- 우측 상단 음소거 버튼 -->
     <button class="top-action-btn mute-btn" id="mute-toggle-btn" onclick="toggleMute()" title="음소거 켜기/끄기">
         <svg id="mute-icon" viewBox="0 0 24 24">
-            <!-- 기본: 소리 켜짐 아이콘 -->
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -620,17 +660,18 @@
         const mainContentBox = document.getElementById('main-content-box');
         const muteIcon = document.getElementById('mute-icon');
 
-        /* [음소거 로직 및 아이콘 정의] */
+        /* [음소거 로직 및 빗금(Slash) 아이콘 정의] */
         let isMuted = localStorage.getItem(`potato-muted-${userId}`) === 'true';
 
+        // 소리 켜짐 (스피커 + 파형)
         const ICON_SOUND_ON = `
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         `;
+        // 음소거 (스피커 + 대각선 사선 빗금)
         const ICON_SOUND_MUTED = `
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <line x1="23" y1="9" x2="17" y2="15" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-            <line x1="17" y1="9" x2="23" y2="15" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="2" y1="2" x2="22" y2="22" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
         `;
 
         function updateMuteDisplay() {
@@ -647,7 +688,7 @@
             updateMuteDisplay();
         }
 
-        /* 반응형 스케일 계산 */
+        /* [반응형 스케일 계산] */
         function adjustLayoutScale() {
             const baseW = 480;
             const baseH = 640;
@@ -801,7 +842,7 @@
             let srcIdx = 0;
             const audio = new Audio(sources[0]);
             audio.preload = 'auto';
-            audio.muted = isMuted; // 음소거 상태 즉시 적용
+            audio.muted = isMuted;
             audio.onerror = () => {
                 srcIdx++;
                 if (srcIdx < sources.length) {
@@ -1241,7 +1282,7 @@
             renderTodos();
         }
 
-        /* [부드럽고 둥근 모서리(Arc) 전체화면 / 축소 아이콘] */
+        /* [아이콘 SVG 정의] */
         const ICON_ENTER_FULLSCREEN = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke-linecap="round" stroke-linejoin="round"/>';
         const ICON_EXIT_FULLSCREEN = `
             <path d="M4 10h3.5a1.5 1.5 0 0 0 1.5-1.5V5" stroke-linecap="round" stroke-linejoin="round"/>
