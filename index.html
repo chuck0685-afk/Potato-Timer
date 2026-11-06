@@ -126,7 +126,18 @@
         .main-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; max-width: 500px; position: relative; z-index: 5; }
         .header-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 25px; text-shadow: 0 2px 4px rgba(0,0,0,0.6); text-align: center; }
         .stats-date { font-size: 14px; opacity: 0.75; font-weight: bold; margin-bottom: 12px; letter-spacing: 0.2px; }
-        h1 { font-size: 26px; margin: 0; font-weight: 900; letter-spacing: -0.5px; line-height: 1; }
+        h1 { font-size: 26px; margin: 0; font-weight: 900; letter-spacing: -0.5px; line-height: 1; display: flex; align-items: center; justify-content: center; }
+        
+        /* 공부하는 수채화 감자 아이콘 이미지 */
+        .potato-study-img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            vertical-align: middle;
+            margin-right: 8px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
         .stats-counter { font-size: 17.6px; font-weight: normal; color: #ffffff; margin-top: 24px; text-shadow: 0 0 6px rgba(255, 255, 255, 0.95), 0 0 12px rgba(106, 85, 201, 0.8), 0 2px 5px rgba(0, 0, 0, 0.7); }
 
         .tabs { display: flex; gap: 12px; margin-bottom: 35px; }
@@ -142,14 +153,14 @@
 
         .timer-row-wrapper { display: flex; align-items: center; justify-content: center; gap: 32px; margin-bottom: 40px; height: 260px; width: 100%; }
         
-        /* 통일된 좌우 마이너스/플러스 버튼 */
+        /* 살짝 더 커지고 훨씬 굵어진 좌우 마이너스/플러스 버튼 */
         .adjust-btn { 
             font-family: inherit; 
             background: none; 
             border: none; 
-            color: rgba(255, 255, 255, 0.85); 
-            font-size: 2.2rem;
-            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9); 
+            font-size: 2.5rem;
+            font-weight: 800;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
             cursor: pointer; 
             display: flex; 
@@ -178,7 +189,7 @@
             transition: none; 
         }
         
-        /* 도톰하고 안정된 비율의 타이머 숫자 */
+        /* 자연스러운 그림자와 도톰한 타이머 숫자 */
         .time-display {
             position: absolute;
             font-size: 50px;
@@ -344,6 +355,7 @@
             body { padding-bottom: 70px; }
             .stats-date { font-size: 12px; margin-bottom: 8px; }
             h1 { font-size: 22px; letter-spacing: -0.3px; }
+            .potato-study-img { width: 28px; height: 28px; margin-right: 6px; }
             .stats-counter { font-size: 15px; margin-top: 16px; }
             .header-area { margin-bottom: 15px; }
             .tabs { gap: 8px; margin-bottom: 25px; }
@@ -351,7 +363,7 @@
             .timer-row-wrapper { gap: 12px; margin-bottom: 30px; height: 210px; }
             .timer-container { width: 210px; height: 210px; }
             .time-display { font-size: 52px; }
-            .adjust-btn { width: 40px; height: 40px; }
+            .adjust-btn { width: 40px; height: 40px; font-size: 2.1rem; }
             .controls { gap: 15px; }
             .btn-start { width: 95px; height: 42px; font-size: 16px; }
             .btn-icon-custom { width: 42px; height: 42px; }
@@ -371,34 +383,7 @@
         <div class="header-area">
             <div class="stats-date" id="stats-date-string">Monday Nov 2, 2026</div>
             <h1 class="app-title">
-                <svg class="potato-study-icon" viewBox="0 0 100 100" width="28" height="28" style="vertical-align: middle; margin-right: 6px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
-                    <!-- 싹 -->
-                    <path d="M50 20 C48 10 42 12 40 16 C38 20 46 22 50 22 C54 22 62 20 60 16 C58 12 52 10 50 20 Z" fill="#7CB342"/>
-                    <path d="M50 22 L50 26" stroke="#558B2F" stroke-width="2.5" stroke-linecap="round"/>
-                    <!-- 감자 몸통 -->
-                    <path d="M50 24 C72 24 82 38 80 62 C78 84 68 88 50 88 C32 88 22 84 20 62 C18 38 28 24 50 24 Z" fill="#E4B476"/>
-                    <!-- 볼터치 -->
-                    <ellipse cx="33" cy="56" rx="5" ry="3" fill="#FF8A80" opacity="0.6"/>
-                    <ellipse cx="67" cy="56" rx="5" ry="3" fill="#FF8A80" opacity="0.6"/>
-                    <!-- 안경 -->
-                    <circle cx="38" cy="50" r="10" stroke="#5D4037" stroke-width="2" fill="none"/>
-                    <circle cx="62" cy="50" r="10" stroke="#5D4037" stroke-width="2" fill="none"/>
-                    <line x1="48" y1="50" x2="52" y2="50" stroke="#5D4037" stroke-width="2"/>
-                    <line x1="28" y1="49" x2="21" y2="46" stroke="#5D4037" stroke-width="2"/>
-                    <line x1="72" y1="49" x2="79" y2="46" stroke="#5D4037" stroke-width="2"/>
-                    <!-- 눈 & 입 -->
-                    <circle cx="39" cy="50" r="2.2" fill="#3E2723"/>
-                    <circle cx="61" cy="50" r="2.2" fill="#3E2723"/>
-                    <path d="M48 56 Q50 58 52 56" stroke="#5D4037" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                    <!-- 책 -->
-                    <path d="M45 68 L58 63 L74 67 L60 73 Z" fill="#ECEFF1"/>
-                    <path d="M58 63 L58 75 L45 79 L45 68 Z" fill="#CFD8DC"/>
-                    <path d="M58 75 L74 69 L74 67 L58 73 Z" fill="#B0BEC5"/>
-                    <!-- 손 & 연필 -->
-                    <circle cx="34" cy="67" r="4.5" fill="#D79E5B"/>
-                    <rect x="29" y="55" width="4" height="13" rx="1" transform="rotate(-30 29 55)" fill="#FDD835"/>
-                    <polygon points="36,66 38,70 34,69" fill="#FB8C00"/>
-                </svg>
+                <img src="./potato.png" alt="Potato" class="potato-study-img">
                 Potato Timer
             </h1>
             <div class="stats-counter" id="stats-counter-string">Today's Focus Time: 0 min</div>
