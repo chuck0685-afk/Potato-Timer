@@ -165,11 +165,11 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            margin-bottom: 25px; 
+            margin-bottom: 20px; 
             text-shadow: 0 2px 4px rgba(0,0,0,0.6); 
             text-align: center; 
         }
-        .stats-date { font-size: 14px; opacity: 0.75; font-weight: bold; margin-bottom: 12px; letter-spacing: 0.2px; }
+        .stats-date { font-size: 14px; opacity: 0.75; font-weight: bold; margin-bottom: 10px; letter-spacing: 0.2px; }
         
         h1 { 
             font-size: 26px; 
@@ -191,9 +191,9 @@
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
 
-        .stats-counter { font-size: 17.6px; font-weight: normal; color: #ffffff; margin-top: 24px; text-shadow: 0 0 6px rgba(255, 255, 255, 0.95), 0 0 12px rgba(106, 85, 201, 0.8), 0 2px 5px rgba(0, 0, 0, 0.7); }
+        .stats-counter { font-size: 17.6px; font-weight: normal; color: #ffffff; margin-top: 18px; text-shadow: 0 0 6px rgba(255, 255, 255, 0.95), 0 0 12px rgba(106, 85, 201, 0.8), 0 2px 5px rgba(0, 0, 0, 0.7); }
 
-        .tabs { display: flex; gap: 12px; margin-bottom: 35px; }
+        .tabs { display: flex; gap: 12px; margin-bottom: 30px; }
         .tab-btn {
             font-family: inherit; background-color: rgba(255, 255, 255, 0.7); border: none;
             font-size: 16px; font-weight: bold; padding: 0; width: 85px; height: 40px;
@@ -205,9 +205,8 @@
         .tab-btn.active { background-color: #6A55C9; color: #ffffff; box-shadow: 0 4px 12px rgba(106, 85, 201, 0.5); }
         .tab-btn.active:hover { background-color: #8E79E7; box-shadow: 0 4px 12px rgba(142, 121, 231, 0.6); }
 
-        .timer-row-wrapper { display: flex; align-items: center; justify-content: center; gap: 32px; margin-bottom: 40px; height: 260px; width: 100%; }
+        .timer-row-wrapper { display: flex; align-items: center; justify-content: center; gap: 32px; margin-bottom: 35px; height: 260px; width: 100%; }
         
-        /* 고속 연타 및 터치 최적화 조절 버튼 */
         .adjust-btn { 
             font-family: inherit; 
             background: transparent !important; 
@@ -225,7 +224,7 @@
             padding: 0; 
             transition: transform 0.1s ease, opacity 0.1s; 
             outline: none; 
-            touch-action: none !important; /* 줌 딜레이 제거 및 고속 연타 허용 */
+            touch-action: manipulation;
             -webkit-tap-highlight-color: transparent !important;
             -webkit-user-select: none;
             user-select: none;
@@ -261,7 +260,7 @@
             z-index: 10;
         }
 
-        .controls { display: flex; gap: 20px; align-items: center; justify-content: center; }
+        .controls { display: flex; gap: 20px; align-items: center; justify-content: center; margin-bottom: 22px; }
         .btn { 
             font-family: inherit; 
             border: none; 
@@ -296,7 +295,103 @@
         .btn-icon-custom:active { transform: scale(0.95) translateY(0); }
         .btn-icon-custom svg { width: 16px; height: 16px; fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* [To-Do 버튼 & 서랍: 전 환경 최하단 강제 고정] */
+        /* [뽀모도로 트래커 라인: 바탕 박스 제거 & 좌우 여백 배치] */
+        .pomo-tracker-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 250px;
+            max-width: 85vw;
+            padding: 4px 2px;
+            box-sizing: border-box;
+        }
+
+        .pomo-left-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pomo-stars-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pomo-star-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            display: block;
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+        .pomo-star-icon.filled {
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.9));
+            animation: starPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes starPop {
+            0% { transform: scale(0.6); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .pomo-count-text {
+            font-size: 15px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+            white-space: nowrap;
+        }
+        .pomo-count-text.max-achieved {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.9);
+            animation: goalGlow 1.8s infinite alternate ease-in-out;
+        }
+        @keyframes goalGlow {
+            from { filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.6)); }
+            to { filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1)); }
+        }
+
+        .pomo-auto-toggle-wrap {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .pomo-toggle-switch {
+            width: 38px;
+            height: 22px;
+            background-color: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 12px;
+            position: relative;
+            transition: background-color 0.25s ease, border-color 0.25s ease;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .pomo-toggle-switch.active {
+            background-color: #6A55C9;
+            border-color: #8E79E7;
+            box-shadow: 0 0 8px rgba(106, 85, 201, 0.6);
+        }
+
+        .pomo-toggle-knob {
+            width: 16px;
+            height: 16px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+            transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .pomo-toggle-switch.active .pomo-toggle-knob {
+            transform: translateX(16px);
+        }
+
+        /* [To-Do 버튼 & 서랍: 최하단 고정] */
         .todo-toggle-btn {
             background-color: rgba(255, 255, 255, 0.25); 
             border: 1px solid rgba(255, 255, 255, 0.3); 
@@ -414,6 +509,162 @@
         .custom-alert-btn { background-color: #6A55C9; color: white; border: none; padding: 11px 36px; font-size: 14px; font-weight: bold; border-radius: 16px; cursor: pointer; transition: background 0.2s; -webkit-tap-highlight-color: transparent; }
         .custom-alert-btn:hover { background-color: #8E79E7; }
 
+        /* [환경설정 팝업 모달] */
+        .settings-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(6, 11, 23, 0.65);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 2500;
+        }
+        .settings-modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .settings-modal-box {
+            background-color: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+            width: 320px;
+            max-width: 90vw;
+            padding: 24px 22px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transform: scale(0.92) translateY(10px);
+            transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+            color: #222222;
+        }
+        .settings-modal-overlay.show .settings-modal-box {
+            transform: scale(1) translateY(0);
+        }
+
+        .settings-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+        .settings-modal-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #6A55C9;
+            margin: 0;
+            letter-spacing: -0.3px;
+        }
+        .settings-close-btn {
+            background: none;
+            border: none;
+            font-size: 26px;
+            color: #555555;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 4px;
+            transition: color 0.15s;
+        }
+        .settings-close-btn:hover { color: #111111; }
+
+        .settings-section-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #6A55C9;
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .settings-time-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .settings-time-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 15px;
+            font-weight: bold;
+            color: #222222;
+        }
+        .settings-mode-label {
+            width: 60px;
+            letter-spacing: -0.2px;
+        }
+        .settings-inputs-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .settings-num-input {
+            width: 48px;
+            height: 34px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(106, 85, 201, 0.35);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            color: #222222;
+            outline: none;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .settings-num-input:focus {
+            border-color: #6A55C9;
+            box-shadow: 0 0 0 2px rgba(106, 85, 201, 0.2);
+        }
+        .settings-unit-label {
+            font-size: 13px;
+            color: #444444;
+            font-weight: normal;
+            margin-right: 4px;
+        }
+
+        /* [목표 카테고리 스타일] */
+        .settings-goal-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #222222;
+        }
+
+        .settings-save-default-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(106, 85, 201, 0.18);
+            cursor: pointer;
+        }
+        .settings-save-default-wrapper input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            cursor: pointer;
+            accent-color: #6A55C9;
+        }
+        .settings-save-default-label {
+            font-size: 13.5px;
+            font-weight: bold;
+            color: #333333;
+            cursor: pointer;
+            user-select: none;
+        }
+
         /* [좌측 하단 전체화면 버튼] */
         .fullscreen-btn {
             position: fixed; 
@@ -438,7 +689,7 @@
         .fullscreen-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08); }
         .fullscreen-btn svg { width: 20px; height: 20px; fill: none; stroke: #ffffff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* [우측 상단 액션 버튼] */
+        /* [우측 상단 액션 버튼 (비율 찌그러짐 원천 차단)] */
         .top-action-btn {
             position: fixed;
             top: 20px;
@@ -458,14 +709,15 @@
             transition: all 0.2s ease;
             -webkit-tap-highlight-color: transparent;
             padding: 0;
+            flex-shrink: 0;
         }
         .top-action-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08); }
         .top-action-btn svg { 
-            width: 22px; 
-            height: 22px; 
+            width: 22px !important; 
+            height: 22px !important; 
             display: block; 
             margin: auto;
-            flex-shrink: 0;
+            flex-shrink: 0 !important;
         }
 
         .settings-btn { right: 20px; }
@@ -489,7 +741,7 @@
         <svg id="mute-icon" viewBox="0 0 24 24"></svg>
     </button>
 
-    <!-- 우측 상단 설정 버튼 -->
+    <!-- 우측 상단 설정 버튼 (완벽한 원형/아이콘 비율 보장) -->
     <button class="top-action-btn settings-btn" id="settings-toggle-btn" onclick="openSettings()" title="설정">
         <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"></circle>
@@ -509,9 +761,9 @@
             </div>
 
             <div class="tabs">
-                <button class="tab-btn active" id="btn-focus" onclick="setMode('focus', 25)">Focus</button>
-                <button class="tab-btn" id="btn-short" onclick="setMode('short', 5)">Short</button>
-                <button class="tab-btn" id="btn-long" onclick="setMode('long', 15)">Long</button>
+                <button class="tab-btn active" id="btn-focus" onclick="handleManualTabChange('focus')">Focus</button>
+                <button class="tab-btn" id="btn-short" onclick="handleManualTabChange('short')">Short</button>
+                <button class="tab-btn" id="btn-long" onclick="handleManualTabChange('long')">Long</button>
             </div>
 
             <div class="timer-row-wrapper">
@@ -539,6 +791,19 @@
                     <svg viewBox="0 0 24 24"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
             </div>
+
+            <!-- 뽀모도로 게이지 바 (배경 박스 없이 세련된 좌우 분리) -->
+            <div class="pomo-tracker-bar">
+                <div class="pomo-left-group">
+                    <div class="pomo-stars-group" id="pomo-stars-box"></div>
+                    <div class="pomo-count-text" id="pomo-cycle-counter">0/10</div>
+                </div>
+                <div class="pomo-auto-toggle-wrap" onclick="toggleAutoPomo()" title="연속 자동 실행">
+                    <div class="pomo-toggle-switch" id="pomo-auto-switch">
+                        <div class="pomo-toggle-knob"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -561,6 +826,68 @@
         </div>
     </div>
 
+    <!-- 환경설정 모달 -->
+    <div class="settings-modal-overlay" id="settings-modal" onclick="handleSettingsOverlayClick(event)">
+        <div class="settings-modal-box" id="settings-modal-box">
+            <div class="settings-modal-header">
+                <h3 class="settings-modal-title">설정</h3>
+                <button class="settings-close-btn" onclick="closeSettings()">&times;</button>
+            </div>
+
+            <div class="settings-section-title">⏱ 시간</div>
+            
+            <div class="settings-time-list">
+                <!-- Focus -->
+                <div class="settings-time-row">
+                    <span class="settings-mode-label">Focus</span>
+                    <div class="settings-inputs-wrapper">
+                        <input type="number" inputmode="numeric" class="settings-num-input" id="input-focus-min" min="0" max="99" onblur="validateInput(this, 99)">
+                        <span class="settings-unit-label">min</span>
+                        <input type="number" inputmode="numeric" class="settings-num-input" id="input-focus-sec" min="0" max="59" onblur="validateInput(this, 59)">
+                        <span class="settings-unit-label">sec</span>
+                    </div>
+                </div>
+
+                <!-- Short Break -->
+                <div class="settings-time-row">
+                    <span class="settings-mode-label">Short</span>
+                    <div class="settings-inputs-wrapper">
+                        <input type="number" inputmode="numeric" class="settings-num-input" id="input-short-min" min="0" max="99" onblur="validateInput(this, 99)">
+                        <span class="settings-unit-label">min</span>
+                        <input type="number" inputmode="numeric" class="settings-num-input" id="input-short-sec" min="0" max="59" onblur="validateInput(this, 59)">
+                        <span class="settings-unit-label">sec</span>
+                    </div>
+                </div>
+
+                <!-- Long Break -->
+                <div class="settings-time-row">
+                    <span class="settings-mode-label">Long</span>
+                    <div class="settings-inputs-wrapper">
+                        <input type="number" inputmode="numeric" class="settings-num-input" id="input-long-min" min="0" max="99" onblur="validateInput(this, 99)">
+                        <span class="settings-unit-label">min</span>
+                        <input type="number" inputmode="numeric" class="settings-num-input" id="input-long-sec" min="0" max="59" onblur="validateInput(this, 59)">
+                        <span class="settings-unit-label">sec</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 목표 카테고리 -->
+            <div class="settings-section-title">🎯 목표</div>
+            <div class="settings-goal-box">
+                <span>오늘의 목표</span>
+                <div class="settings-inputs-wrapper">
+                    <input type="number" inputmode="numeric" class="settings-num-input" id="input-target-cycles" min="1" max="99" onblur="validateInput(this, 99, 1)">
+                    <span class="settings-unit-label">회</span>
+                </div>
+            </div>
+
+            <label class="settings-save-default-wrapper">
+                <input type="checkbox" id="chk-save-default">
+                <span class="settings-save-default-label">기본 세팅으로 저장</span>
+            </label>
+        </div>
+    </div>
+
     <!-- 좌측 하단 전체화면 버튼 -->
     <button class="fullscreen-btn" id="fullscreen-toggle-btn" onclick="toggleFullScreen()" title="전체화면 전환">
         <svg id="fs-icon" viewBox="0 0 24 24">
@@ -569,6 +896,20 @@
     </button>
 
     <script>
+        /* [더블클릭 / 더블탭 줌 전역 차단] */
+        let lastTouchTimeGlobal = 0;
+        document.addEventListener('touchend', function(e) {
+            const now = Date.now();
+            if (now - lastTouchTimeGlobal <= 320) {
+                e.preventDefault();
+            }
+            lastTouchTimeGlobal = now;
+        }, { passive: false });
+
+        document.addEventListener('dblclick', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+
         const firebaseConfig = {
             apiKey: "AIzaSyDUQR8UdbWhyBZHUqegvd6ZSjfXuGiNYpI",
             authDomain: "potato-timer-402f8.firebaseapp.com",
@@ -600,8 +941,30 @@
             ]
         };
 
+        const HARD_DEFAULTS = {
+            focus: { min: 25, sec: 0 },
+            short: { min: 5, sec: 0 },
+            long: { min: 15, sec: 0 }
+        };
+
+        function getInitialModeSettings() {
+            const isSavePermanent = localStorage.getItem(`potato-save-default-${userId}`) === 'true';
+            if (isSavePermanent) {
+                try {
+                    const saved = localStorage.getItem(`potato-timer-presets-${userId}`);
+                    if (saved) return JSON.parse(saved);
+                } catch(e) {}
+            }
+            return JSON.parse(JSON.stringify(HARD_DEFAULTS));
+        }
+
+        let modeSettings = getInitialModeSettings();
+
+        // 목표 주기 설정 (기본값: 10)
+        let targetCycleGoal = parseInt(localStorage.getItem(`potato-target-goal-${userId}`), 10) || 10;
+
         let currentMode = 'focus'; 
-        let totalSeconds = 25 * 60;
+        let totalSeconds = modeSettings.focus.min * 60 + modeSettings.focus.sec;
         let timeRemaining = totalSeconds; 
         
         let timerAnimationId = null;
@@ -610,6 +973,17 @@
         let targetEndTime = null;
         
         const totalLength = 345.57; 
+
+        /* 뽀모도로 게이지 & 자동 순환 상태 */
+        let pomoStars = parseInt(localStorage.getItem(`potato-pomo-stars-${userId}`), 10) || 0;
+        let pomoCycleCount = parseInt(localStorage.getItem(`potato-pomo-cycles-${userId}`), 10) || 0;
+        let isAutoPomo = localStorage.getItem(`potato-auto-pomo-${userId}`) === 'true';
+        let lastActiveTime = parseInt(localStorage.getItem(`potato-last-active-${userId}`), 10) || Date.now();
+
+        function updateLastActive() {
+            lastActiveTime = Date.now();
+            localStorage.setItem(`potato-last-active-${userId}`, lastActiveTime.toString());
+        }
 
         const timeText = document.getElementById('time-text');
         const progressCircle = document.getElementById('progress');
@@ -628,16 +1002,18 @@
         const fsIcon = document.getElementById('fs-icon');
         const mainContentBox = document.getElementById('main-content-box');
         const muteIcon = document.getElementById('mute-icon');
+        const settingsModal = document.getElementById('settings-modal');
+        const pomoStarsBox = document.getElementById('pomo-stars-box');
+        const pomoCycleCounter = document.getElementById('pomo-cycle-counter');
+        const pomoAutoSwitch = document.getElementById('pomo-auto-switch');
 
-        /* [음소거 로직 및 완전 분리된 정중앙 아이콘] */
+        /* [음소거 로직] */
         let isMuted = localStorage.getItem(`potato-muted-${userId}`) === 'true';
 
-        // 1. 소리 켜짐 (스피커 + 음파 곡선)
         const ICON_SOUND_ON = `
             <path d="M11 5L6 9H3v6h3l5 4V5z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
             <path d="M15.5 8.5c1 1 1 3.5 0 5M18.5 6c2.5 2.5 2.5 7.5 0 10" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
         `;
-        // 2. 음소거 (스피커 본체 정중앙 cx=12 + 스피커 윤곽선 위로만 짧아진 대각선 빗금)
         const ICON_SOUND_MUTED = `
             <g transform="translate(1, 0)">
                 <path d="M13 6L8.5 9.5H5.5v5h3l4.5 3.5V6z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
@@ -648,18 +1024,65 @@
         function updateMuteDisplay() {
             muteIcon.innerHTML = isMuted ? ICON_SOUND_MUTED : ICON_SOUND_ON;
             document.getElementById('mute-toggle-btn').title = isMuted ? "소리 켜기" : "소리 끄기 (음소거)";
-            if (activeAudio) {
-                activeAudio.muted = isMuted;
-            }
+            if (activeAudio) activeAudio.muted = isMuted;
         }
 
         function toggleMute() {
+            updateLastActive();
             isMuted = !isMuted;
             localStorage.setItem(`potato-muted-${userId}`, isMuted.toString());
             updateMuteDisplay();
         }
 
-        /* [모바일/PC 고속 연속 조절 핸들러 (+ / - 버튼 연타 및 꾹 누르기 지원)] */
+        /* [뽀모도로 트래커 렌더링 (1:1 비율 별 & N/목표)] */
+        function renderPomoTracker() {
+            pomoStarsBox.innerHTML = '';
+            for (let i = 0; i < 4; i++) {
+                const isFilled = i < pomoStars;
+                const starSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                starSvg.setAttribute("viewBox", "0 0 24 24");
+                starSvg.setAttribute("class", `pomo-star-icon ${isFilled ? 'filled' : ''}`);
+
+                if (isFilled) {
+                    starSvg.innerHTML = `<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#ffd700" stroke="#ffae00" stroke-width="1.2" stroke-linejoin="round"/>`;
+                } else {
+                    starSvg.innerHTML = `<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.8" stroke-dasharray="2.8 2.8" stroke-linejoin="round"/>`;
+                }
+                pomoStarsBox.appendChild(starSvg);
+            }
+
+            pomoCycleCounter.textContent = `${pomoCycleCount}/${targetCycleGoal}`;
+            
+            // 목표 달성 및 초과 시 반짝임 효과
+            if (pomoCycleCount >= targetCycleGoal) {
+                pomoCycleCounter.classList.add('max-achieved');
+            } else {
+                pomoCycleCounter.classList.remove('max-achieved');
+            }
+
+            if (isAutoPomo) {
+                pomoAutoSwitch.classList.add('active');
+            } else {
+                pomoAutoSwitch.classList.remove('active');
+            }
+        }
+
+        function toggleAutoPomo() {
+            updateLastActive();
+            isAutoPomo = !isAutoPomo;
+            localStorage.setItem(`potato-auto-pomo-${userId}`, isAutoPomo.toString());
+            renderPomoTracker();
+        }
+
+        function savePomoState() {
+            localStorage.setItem(`potato-pomo-stars-${userId}`, pomoStars.toString());
+            localStorage.setItem(`potato-pomo-cycles-${userId}`, pomoCycleCount.toString());
+            localStorage.setItem(`potato-auto-pomo-${userId}`, isAutoPomo.toString());
+            localStorage.setItem(`potato-target-goal-${userId}`, targetCycleGoal.toString());
+            saveState();
+        }
+
+        /* [모바일/PC 고속 연속 조절 핸들러] */
         function setupAdjustButton(btnId, deltaAmount) {
             const btn = document.getElementById(btnId);
             let holdTimer = null;
@@ -667,6 +1090,7 @@
 
             function triggerAdjust(e) {
                 if (e) e.preventDefault();
+                updateLastActive();
                 adjustTime(deltaAmount);
             }
 
@@ -675,12 +1099,11 @@
                 clearTimeout(holdTimer);
                 clearInterval(repeatInterval);
 
-                // 350ms 꾹 누르면 초당 8회 속도로 쾌속 조절
                 holdTimer = setTimeout(() => {
                     repeatInterval = setInterval(() => {
                         adjustTime(deltaAmount);
-                    }, 125);
-                }, 350);
+                    }, 120);
+                }, 320);
             });
 
             function stopRepeat() {
@@ -698,7 +1121,7 @@
 
         function adjustLayoutScale() {
             const baseW = 480;
-            const baseH = 640;
+            const baseH = 650;
             const winW = window.innerWidth;
             const winH = window.innerHeight;
             const scaleFactor = Math.min(1, (winW - 20) / baseW, (winH - 80) / baseH);
@@ -730,6 +1153,9 @@
                     todos: todos,
                     accumulatedFocusSeconds: accumulatedFocusSeconds,
                     lastSavedDate: lastSavedDate,
+                    pomoStars: pomoStars,
+                    pomoCycleCount: pomoCycleCount,
+                    targetCycleGoal: targetCycleGoal,
                     updatedAt: Date.now()
                 }, { merge: true }).catch(err => console.error("Firestore Save Error:", err));
             }
@@ -747,13 +1173,20 @@
                         accumulatedFocusSeconds = data.accumulatedFocusSeconds;
                     }
                     if (data.lastSavedDate) lastSavedDate = data.lastSavedDate;
+                    if (typeof data.pomoStars === 'number') pomoStars = data.pomoStars;
+                    if (typeof data.pomoCycleCount === 'number') pomoCycleCount = data.pomoCycleCount;
+                    if (typeof data.targetCycleGoal === 'number') targetCycleGoal = data.targetCycleGoal;
 
                     localStorage.setItem(`potato-todos-${userId}`, JSON.stringify(todos));
                     localStorage.setItem(`potato-focus-seconds-${userId}`, accumulatedFocusSeconds.toString());
                     localStorage.setItem(`potato-last-date-${userId}`, lastSavedDate);
+                    localStorage.setItem(`potato-pomo-stars-${userId}`, pomoStars.toString());
+                    localStorage.setItem(`potato-pomo-cycles-${userId}`, pomoCycleCount.toString());
+                    localStorage.setItem(`potato-target-goal-${userId}`, targetCycleGoal.toString());
 
                     renderTodos();
                     updateStatsDisplay();
+                    renderPomoTracker();
                     isSyncingFromCloud = false;
                 }
             }, (err) => console.error("Firestore Listen Error:", err));
@@ -827,6 +1260,10 @@
             milkyWayGlow.classList.remove('visible');
         }
 
+        /* [Web Audio API 하드웨어 증폭 & 페이드인 엔진] */
+        let audioCtx = null;
+        let gainNode = null;
+        let audioSourceNode = null;
         let activeAudio = null;
         let audioLoopInterval = null;
         let isFocusFirstRun = true;
@@ -850,6 +1287,7 @@
             const audio = new Audio(sources[0]);
             audio.preload = 'auto';
             audio.muted = isMuted;
+            audio.crossOrigin = "anonymous";
             audio.onerror = () => {
                 srcIdx++;
                 if (srcIdx < sources.length) {
@@ -860,26 +1298,37 @@
             return audio;
         }
 
-        /* [포커스 모드: 서서히 커지는 자연스러운 페이드인 복원] */
         function startInfiniteAudioLoop(mode) {
             stopAudioEngine();
             activeAudio = createAudioInstance(mode);
             activeAudio.muted = isMuted;
             isFocusFirstRun = true;
 
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                audioSourceNode = audioCtx.createMediaElementSource(activeAudio);
+                gainNode = audioCtx.createGain();
+                gainNode.gain.value = (mode === 'focus') ? 2.5 : 1.3; 
+                audioSourceNode.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+            } catch(e) {}
+
             const cycleDuration = 14.0;
             let cycleStartTime = performance.now();
 
             activeAudio.currentTime = 0;
-            // 시작 볼륨: 포커스는 부드러운 0.35에서 시작, 휴식은 0.95
-            activeAudio.volume = (mode === 'focus') ? 0.35 : 0.95;
+            activeAudio.volume = (mode === 'focus') ? 0.35 : 1.0;
             activeAudio.play().catch(() => {});
 
             audioLoopInterval = setInterval(() => {
                 if (!activeAudio) return;
                 const elapsedInCycle = (performance.now() - cycleStartTime) / 1000;
 
-                // 14초 사이클 완료 시 재시작
                 if (elapsedInCycle >= cycleDuration || activeAudio.currentTime >= cycleDuration) {
                     cycleStartTime = performance.now();
                     activeAudio.currentTime = 0;
@@ -889,7 +1338,6 @@
                     return;
                 }
 
-                // 포커스 모드 페이드인 곡선: 4초 동안 0.35에서 최대 볼륨 1.0으로 서서히 상승
                 if (mode === 'focus') {
                     if (isFocusFirstRun && elapsedInCycle <= 4.0) {
                         const progress = elapsedInCycle / 4.0;
@@ -900,9 +1348,9 @@
                 } else {
                     if (elapsedInCycle >= 12.0) {
                         const fadeRatio = (14.0 - elapsedInCycle) / 2.0;
-                        activeAudio.volume = Math.max(0.01, fadeRatio * 0.95);
+                        activeAudio.volume = Math.max(0.01, fadeRatio * 1.0);
                     } else {
-                        activeAudio.volume = 0.95;
+                        activeAudio.volume = 1.0;
                     }
                 }
             }, 50);
@@ -915,14 +1363,24 @@
             return `${days[d.getDay()]} ${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
         }
 
+        /* [자정 스마트 리셋 로직: 2시간 유예] */
         function checkMidnightReset() {
             const todayStr = getFormattedDate();
             if (lastSavedDate !== todayStr && lastSavedDate !== "") {
-                todos = todos.filter(t => !t.completed);
-                accumulatedFocusSeconds = 0;
-                lastSavedDate = todayStr;
-                saveState();
-                renderTodos();
+                const now = Date.now();
+                const idleDuration = now - lastActiveTime;
+                const isOverTwoHoursIdle = idleDuration >= (2 * 60 * 60 * 1000);
+
+                if (!isTimerRunning && isOverTwoHoursIdle) {
+                    todos = todos.filter(t => !t.completed);
+                    accumulatedFocusSeconds = 0;
+                    pomoStars = 0;
+                    pomoCycleCount = 0;
+                    lastSavedDate = todayStr;
+                    savePomoState();
+                    renderTodos();
+                    renderPomoTracker();
+                }
             } else {
                 lastSavedDate = todayStr;
                 saveState();
@@ -948,6 +1406,7 @@
         }
 
         function adjustTime(amount) {
+            updateLastActive();
             const delta = amount * 60;
             if (delta < 0 && timeRemaining <= 60) {
                 if (isTimerRunning) {
@@ -1003,6 +1462,7 @@
         }
 
         function toggleTimer() {
+            updateLastActive();
             if (isTimerRunning) return; 
             if (timeRemaining <= 0) return;
             checkMidnightReset(); 
@@ -1014,6 +1474,7 @@
         }
 
         function pauseTimer() {
+            updateLastActive();
             if (isTimerRunning) {
                 isTimerRunning = false;
                 cancelAnimationFrame(timerAnimationId);
@@ -1023,27 +1484,39 @@
             }
         }
 
+        /* [Reset 시 별 게이지는 유지하고 현재 회차 시간만 복원] */
         function resetTimer() {
+            updateLastActive();
             isTimerRunning = false;
             cancelAnimationFrame(timerAnimationId);
             startBtn.style.backgroundColor = "#6A55C9";
             stopAudioEngine();
-            if (currentMode === 'focus') totalSeconds = 25 * 60;
-            else if (currentMode === 'short') totalSeconds = 5 * 60;
-            else if (currentMode === 'long') totalSeconds = 15 * 60;
+            const setting = modeSettings[currentMode];
+            totalSeconds = setting.min * 60 + setting.sec;
             timeRemaining = totalSeconds;
             updateDisplay();
         }
 
-        function setMode(mode, minutes) {
+        function setMode(mode) {
             currentMode = mode;
             tabButtons.forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-' + mode).classList.add('active');
-            totalSeconds = minutes * 60;
             resetTimer();
         }
 
+        /* [수동 탭 전환: 사용자가 탭을 누르면 오토 토글 OFF] */
+        function handleManualTabChange(mode) {
+            updateLastActive();
+            if (isAutoPomo) {
+                isAutoPomo = false;
+                localStorage.setItem(`potato-auto-pomo-${userId}`, 'false');
+                renderPomoTracker();
+            }
+            setMode(mode);
+        }
+
         function stopTimerWithAlert() {
+            updateLastActive();
             isTimerRunning = false;
             cancelAnimationFrame(timerAnimationId);
             startBtn.style.backgroundColor = "#6A55C9";
@@ -1064,10 +1537,50 @@
             }, 350);
         }
 
+        /* [완료 버튼 클릭: 별 적립 판정 & 자동 연속 순환] */
         function closeCustomAlert() {
+            updateLastActive();
             customAlert.classList.remove('show');
             stopAudioEngine();
-            resetTimer();
+
+            const completedMode = currentMode;
+
+            // 포커스 세션 완주 시 별 게이지 적립 (단일 텀 25분 이상 기준)
+            if (completedMode === 'focus') {
+                const setting = modeSettings.focus;
+                const plannedSeconds = setting.min * 60 + setting.sec;
+
+                if (plannedSeconds >= 25 * 60) {
+                    if (pomoStars < 4) {
+                        pomoStars++;
+                    } else {
+                        pomoStars = 1;
+                    }
+
+                    // 4개 완성 시 주기 카운트 1 증가
+                    if (pomoStars === 4) {
+                        pomoCycleCount++;
+                    }
+                    savePomoState();
+                    renderPomoTracker();
+                }
+            }
+
+            // 자동 순환(Auto Pomo) 활성화 여부에 따른 분기
+            if (isAutoPomo) {
+                if (completedMode === 'focus') {
+                    if (pomoStars === 4) {
+                        setMode('long');
+                    } else {
+                        setMode('short');
+                    }
+                } else {
+                    setMode('focus');
+                }
+                toggleTimer();
+            } else {
+                resetTimer();
+            }
         }
 
         document.addEventListener('visibilitychange', () => {
@@ -1084,8 +1597,96 @@
             }
         });
 
+        /* [환경설정 모달 인터랙션 로직] */
+        let settingsSnapshot = null;
+
+        function validateInput(input, maxVal, minVal = 0) {
+            let val = parseInt(input.value, 10);
+            if (isNaN(val) || val < minVal) val = minVal;
+            if (val > maxVal) val = maxVal;
+            input.value = (maxVal === 99 && minVal === 0) ? String(val).padStart(2, '0') : String(val);
+        }
+
+        function openSettings() {
+            updateLastActive();
+            document.getElementById('input-focus-min').value = String(modeSettings.focus.min).padStart(2, '0');
+            document.getElementById('input-focus-sec').value = String(modeSettings.focus.sec).padStart(2, '0');
+            document.getElementById('input-short-min').value = String(modeSettings.short.min).padStart(2, '0');
+            document.getElementById('input-short-sec').value = String(modeSettings.short.sec).padStart(2, '0');
+            document.getElementById('input-long-min').value = String(modeSettings.long.min).padStart(2, '0');
+            document.getElementById('input-long-sec').value = String(modeSettings.long.sec).padStart(2, '0');
+            
+            // 목표 주기 설정값 채우기
+            document.getElementById('input-target-cycles').value = String(targetCycleGoal);
+
+            const isSavePermanent = localStorage.getItem(`potato-save-default-${userId}`) === 'true';
+            document.getElementById('chk-save-default').checked = isSavePermanent;
+
+            settingsSnapshot = JSON.stringify({
+                settings: modeSettings,
+                targetGoal: targetCycleGoal,
+                saveDefault: isSavePermanent
+            });
+
+            settingsModal.classList.add('show');
+        }
+
+        function handleSettingsOverlayClick(event) {
+            if (event.target === settingsModal) {
+                closeSettings();
+            }
+        }
+
+        function closeSettings() {
+            updateLastActive();
+            const newSettings = {
+                focus: {
+                    min: Math.min(99, Math.max(0, parseInt(document.getElementById('input-focus-min').value, 10) || 0)),
+                    sec: Math.min(59, Math.max(0, parseInt(document.getElementById('input-focus-sec').value, 10) || 0))
+                },
+                short: {
+                    min: Math.min(99, Math.max(0, parseInt(document.getElementById('input-short-min').value, 10) || 0)),
+                    sec: Math.min(59, Math.max(0, parseInt(document.getElementById('input-short-sec').value, 10) || 0))
+                },
+                long: {
+                    min: Math.min(99, Math.max(0, parseInt(document.getElementById('input-long-min').value, 10) || 0)),
+                    sec: Math.min(59, Math.max(0, parseInt(document.getElementById('input-long-sec').value, 10) || 0))
+                }
+            };
+
+            const newTargetGoal = Math.min(99, Math.max(1, parseInt(document.getElementById('input-target-cycles').value, 10) || 10));
+            const isSaveDefault = document.getElementById('chk-save-default').checked;
+            localStorage.setItem(`potato-save-default-${userId}`, isSaveDefault.toString());
+
+            const newSnapshot = JSON.stringify({
+                settings: newSettings,
+                targetGoal: newTargetGoal,
+                saveDefault: isSaveDefault
+            });
+
+            const hasChanged = (newSnapshot !== settingsSnapshot);
+
+            if (isSaveDefault) {
+                localStorage.setItem(`potato-timer-presets-${userId}`, JSON.stringify(newSettings));
+                localStorage.setItem(`potato-target-goal-${userId}`, newTargetGoal.toString());
+            } else {
+                localStorage.removeItem(`potato-timer-presets-${userId}`);
+            }
+
+            modeSettings = newSettings;
+            targetCycleGoal = newTargetGoal;
+            settingsModal.classList.remove('show');
+
+            renderPomoTracker();
+
+            if (hasChanged) {
+                resetTimer();
+            }
+        }
+
         /* [To-Do 리스트] */
         function toggleDrawer(event) {
+            updateLastActive();
             if (event) event.stopPropagation(); 
             todoDrawer.classList.toggle('open');
             todoToggleBtn.classList.toggle('drawer-open');
@@ -1095,7 +1696,7 @@
             const isClickInsideDrawer = todoDrawer.contains(event.target);
             const isClickToggleBtn = todoToggleBtn.contains(event.target);
             const isClickTabBtn = event.target.classList.contains('tab-btn');
-            const isControl = event.target.closest('.controls') || event.target.closest('.adjust-btn');
+            const isControl = event.target.closest('.controls') || event.target.closest('.adjust-btn') || event.target.closest('.pomo-tracker-bar');
             
             if (todoDrawer.classList.contains('open') && !isClickInsideDrawer && !isClickToggleBtn && !isClickTabBtn && !isControl) {
                 todoDrawer.classList.remove('open');
@@ -1239,6 +1840,7 @@
         }
 
         function reorderUncompletedTodos(sourceId, targetId) {
+            updateLastActive();
             const uncompleted = todos.filter(t => !t.completed).sort((a, b) => a.order - b.order);
             const sourceIdx = uncompleted.findIndex(t => t.id === sourceId);
             const targetIdx = uncompleted.findIndex(t => t.id === targetId);
@@ -1257,6 +1859,7 @@
         }
 
         function addTodo() {
+            updateLastActive();
             const input = document.getElementById('todo-input');
             const text = input.value.trim();
             if (!text) return;
@@ -1277,6 +1880,7 @@
         }
 
         function toggleTodo(id, e) {
+            updateLastActive();
             if (e) e.stopPropagation();
             const item = todos.find(t => t.id === id);
             if (!item) return;
@@ -1288,6 +1892,7 @@
         }
 
         function deleteTodo(id, e) {
+            updateLastActive();
             if (e) e.stopPropagation();
             todos = todos.filter(t => t.id !== id);
             saveState();
@@ -1313,6 +1918,7 @@
         const isEmbedded = window.self !== window.top;
 
         function toggleFullScreen() {
+            updateLastActive();
             window.scrollTo(0, 1);
 
             if (isEmbedded) {
@@ -1373,10 +1979,6 @@
             if (!isFs && !isPseudoFullscreen) updateFullscreenIcon(false);
         });
 
-        function openSettings() {
-            console.log("Settings button clicked");
-        }
-
         /* 초기 구동 */
         checkMidnightReset();
         updateDisplay();
@@ -1384,6 +1986,7 @@
         initCloudSync();
         adjustLayoutScale();
         updateMuteDisplay();
+        renderPomoTracker();
         setTimeout(triggerShootingStar, 1500);
     </script>
 </body>
