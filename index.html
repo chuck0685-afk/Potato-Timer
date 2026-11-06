@@ -23,7 +23,6 @@
             box-sizing: border-box; 
             -webkit-tap-highlight-color: transparent !important;
             outline: none;
-            touch-action: manipulation;
         }
 
         html, body {
@@ -208,6 +207,7 @@
 
         .timer-row-wrapper { display: flex; align-items: center; justify-content: center; gap: 32px; margin-bottom: 40px; height: 260px; width: 100%; }
         
+        /* 고속 연타 및 터치 최적화 조절 버튼 */
         .adjust-btn { 
             font-family: inherit; 
             background: transparent !important; 
@@ -220,17 +220,18 @@
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            width: 50px; 
-            height: 50px; 
+            width: 54px; 
+            height: 54px; 
             padding: 0; 
-            transition: transform 0.15s ease, opacity 0.15s; 
+            transition: transform 0.1s ease, opacity 0.1s; 
             outline: none; 
-            touch-action: manipulation;
+            touch-action: none !important; /* 줌 딜레이 제거 및 고속 연타 허용 */
             -webkit-tap-highlight-color: transparent !important;
-            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
         .adjust-btn:hover { transform: scale(1.2); }
-        .adjust-btn:active { opacity: 0.7; transform: scale(1.1); background: transparent !important; }
+        .adjust-btn:active { opacity: 0.6; transform: scale(0.95); background: transparent !important; }
 
         .timer-container { position: relative; width: 260px; height: 260px; display: flex; align-items: center; justify-content: center; }
         .timer-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
@@ -463,7 +464,7 @@
             width: 22px; 
             height: 22px; 
             display: block; 
-            margin: 0;
+            margin: auto;
             flex-shrink: 0;
         }
 
@@ -514,7 +515,7 @@
             </div>
 
             <div class="timer-row-wrapper">
-                <button class="adjust-btn btn-minus" onclick="adjustTime(-1)">-</button>
+                <button class="adjust-btn btn-minus" id="btn-adjust-minus">-</button>
                 
                 <div class="timer-container">
                     <svg class="timer-svg" viewBox="0 0 240 240">
@@ -524,7 +525,7 @@
                     <div class="time-display" id="time-text">25:00</div>
                 </div>
 
-                <button class="adjust-btn btn-plus" onclick="adjustTime(1)">+</button>
+                <button class="adjust-btn btn-plus" id="btn-adjust-plus">+</button>
             </div>
 
             <div class="controls">
@@ -568,20 +569,6 @@
     </button>
 
     <script>
-        /* 전역 더블탭 줌 방지 */
-        let lastTouchTime = 0;
-        document.addEventListener('touchend', function (e) {
-            const now = Date.now();
-            if (now - lastTouchTime <= 300) {
-                e.preventDefault();
-            }
-            lastTouchTime = now;
-        }, { passive: false });
-
-        document.addEventListener('dblclick', function (e) {
-            e.preventDefault();
-        });
-
         const firebaseConfig = {
             apiKey: "AIzaSyDUQR8UdbWhyBZHUqegvd6ZSjfXuGiNYpI",
             authDomain: "potato-timer-402f8.firebaseapp.com",
@@ -642,16 +629,20 @@
         const mainContentBox = document.getElementById('main-content-box');
         const muteIcon = document.getElementById('mute-icon');
 
-        /* [음소거 아이콘: 절대 좌표 중심 고정] */
+        /* [음소거 로직 및 완전 분리된 정중앙 아이콘] */
         let isMuted = localStorage.getItem(`potato-muted-${userId}`) === 'true';
 
+        // 1. 소리 켜짐 (스피커 + 음파 곡선)
         const ICON_SOUND_ON = `
             <path d="M11 5L6 9H3v6h3l5 4V5z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
             <path d="M15.5 8.5c1 1 1 3.5 0 5M18.5 6c2.5 2.5 2.5 7.5 0 10" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
         `;
+        // 2. 음소거 (스피커 본체 정중앙 cx=12 + 스피커 윤곽선 위로만 짧아진 대각선 빗금)
         const ICON_SOUND_MUTED = `
-            <path d="M11 5L6 9H3v6h3l5 4V5z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
-            <line x1="5" y1="5" x2="19" y2="19" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+            <g transform="translate(1, 0)">
+                <path d="M13 6L8.5 9.5H5.5v5h3l4.5 3.5V6z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+                <line x1="6.5" y1="6.5" x2="16.5" y2="16.5" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round"/>
+            </g>
         `;
 
         function updateMuteDisplay() {
@@ -667,6 +658,43 @@
             localStorage.setItem(`potato-muted-${userId}`, isMuted.toString());
             updateMuteDisplay();
         }
+
+        /* [모바일/PC 고속 연속 조절 핸들러 (+ / - 버튼 연타 및 꾹 누르기 지원)] */
+        function setupAdjustButton(btnId, deltaAmount) {
+            const btn = document.getElementById(btnId);
+            let holdTimer = null;
+            let repeatInterval = null;
+
+            function triggerAdjust(e) {
+                if (e) e.preventDefault();
+                adjustTime(deltaAmount);
+            }
+
+            btn.addEventListener('pointerdown', (e) => {
+                triggerAdjust(e);
+                clearTimeout(holdTimer);
+                clearInterval(repeatInterval);
+
+                // 350ms 꾹 누르면 초당 8회 속도로 쾌속 조절
+                holdTimer = setTimeout(() => {
+                    repeatInterval = setInterval(() => {
+                        adjustTime(deltaAmount);
+                    }, 125);
+                }, 350);
+            });
+
+            function stopRepeat() {
+                clearTimeout(holdTimer);
+                clearInterval(repeatInterval);
+            }
+
+            btn.addEventListener('pointerup', stopRepeat);
+            btn.addEventListener('pointerleave', stopRepeat);
+            btn.addEventListener('pointercancel', stopRepeat);
+        }
+
+        setupAdjustButton('btn-adjust-minus', -1);
+        setupAdjustButton('btn-adjust-plus', 1);
 
         function adjustLayoutScale() {
             const baseW = 480;
@@ -801,6 +829,7 @@
 
         let activeAudio = null;
         let audioLoopInterval = null;
+        let isFocusFirstRun = true;
 
         function stopAudioEngine() {
             if (audioLoopInterval) {
@@ -831,23 +860,52 @@
             return audio;
         }
 
-        /* [단순화된 고음량 재생 엔진 - 볼륨 감쇄 방지] */
+        /* [포커스 모드: 서서히 커지는 자연스러운 페이드인 복원] */
         function startInfiniteAudioLoop(mode) {
             stopAudioEngine();
             activeAudio = createAudioInstance(mode);
             activeAudio.muted = isMuted;
-            activeAudio.volume = 1.0; // 최대 기본 음량 즉시 지정
+            isFocusFirstRun = true;
+
+            const cycleDuration = 14.0;
+            let cycleStartTime = performance.now();
+
             activeAudio.currentTime = 0;
+            // 시작 볼륨: 포커스는 부드러운 0.35에서 시작, 휴식은 0.95
+            activeAudio.volume = (mode === 'focus') ? 0.35 : 0.95;
             activeAudio.play().catch(() => {});
 
-            // 14초 간격 재시작 루프 (볼륨을 깎지 않고 원본 볼륨 100% 유지)
             audioLoopInterval = setInterval(() => {
                 if (!activeAudio) return;
-                if (activeAudio.currentTime >= 13.8 || activeAudio.ended) {
+                const elapsedInCycle = (performance.now() - cycleStartTime) / 1000;
+
+                // 14초 사이클 완료 시 재시작
+                if (elapsedInCycle >= cycleDuration || activeAudio.currentTime >= cycleDuration) {
+                    cycleStartTime = performance.now();
                     activeAudio.currentTime = 0;
+                    if (mode === 'focus') isFocusFirstRun = false;
+                    activeAudio.volume = 1.0;
                     activeAudio.play().catch(() => {});
+                    return;
                 }
-            }, 200);
+
+                // 포커스 모드 페이드인 곡선: 4초 동안 0.35에서 최대 볼륨 1.0으로 서서히 상승
+                if (mode === 'focus') {
+                    if (isFocusFirstRun && elapsedInCycle <= 4.0) {
+                        const progress = elapsedInCycle / 4.0;
+                        activeAudio.volume = Math.min(1.0, 0.35 + progress * 0.65);
+                    } else {
+                        activeAudio.volume = 1.0;
+                    }
+                } else {
+                    if (elapsedInCycle >= 12.0) {
+                        const fadeRatio = (14.0 - elapsedInCycle) / 2.0;
+                        activeAudio.volume = Math.max(0.01, fadeRatio * 0.95);
+                    } else {
+                        activeAudio.volume = 0.95;
+                    }
+                }
+            }, 50);
         }
 
         function getFormattedDate() {
