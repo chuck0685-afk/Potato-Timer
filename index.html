@@ -9,50 +9,48 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-    <style>
-        /* 온글잎 나루일기 웹폰트 불러오기 */
-        @font-face {
-            font-family: 'Ownglyph_naruilgi-Rg';
-            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_naruilgi-Rg.woff2') format('woff2');
-            font-weight: normal;
-            font-style: normal;
-        }
+<style>
+    /* 온글잎 나루일기 웹폰트 (안전 CDN 경로) */
+    @font-face {
+        font-family: 'Ownglyph_naruilgi-Rg';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_naruilgi-Rg.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+    }
 
-        /* [1부] 미니멀 웹 리셋 및 밤하늘 우주 테마 구조 */
-        * { box-sizing: border-box; }
-        html, body {
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            /* 👇 폰트를 온글잎 나루일기로 변경 */
-            font-family: 'Ownglyph_naruilgi-Rg', -apple-system, BlinkMacSystemFont, "NanumSquareRound", sans-serif;
-            /* 깃허브 배포 페이지의 원본 이미지 주소를 직접 참조 */
-            background-image: url('./night.png'), radial-gradient(circle at 50% 30%, #172554 0%, #0b1424 100%);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-color: #0b1424;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-            padding-bottom: 80px; 
-            user-select: none;
-            -webkit-user-select: none;
-            position: relative;
-        }
+    * { box-sizing: border-box; }
+    html, body {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    body {
+        /* 나루일기를 1순위로 지정하고 따옴표 정확히 유지 */
+        font-family: 'Ownglyph_naruilgi-Rg', sans-serif;
+        background-image: url('./night.png'), radial-gradient(circle at 50% 30%, #172554 0%, #0b1424 100%);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #0b1424;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+        padding-bottom: 80px; 
+        user-select: none;
+        -webkit-user-select: none;
+        position: relative;
+    }
 
-        /* 버튼 및 텍스트 입력창 서체 통일 */
-        button, input, textarea {
-            font-family: inherit;
-        }
+    /* 모든 버튼, 텍스트 입력창, 투두 영역에 강제 적용 */
+    button, input, textarea, div, span, p {
+        font-family: 'Ownglyph_naruilgi-Rg', sans-serif !important;
+    }
         /* [심우주 은하수 & 성운 레이어] */
         .milky-way-nebula {
             position: absolute;
