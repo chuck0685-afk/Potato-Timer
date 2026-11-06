@@ -154,14 +154,14 @@
             transition: transform 0.1s ease;
         }
 
-        /* 모바일에서만 타이머 본체 상단 1cm 상향 이동 */
+        /* 모바일 상향 배치 */
         @media (max-width: 600px) {
             .viewport-scaler {
                 transform: translateY(-38px);
             }
         }
 
-        /* 태블릿은 유동적 중앙 정렬 */
+        /* 태블릿 유동 중앙 정렬 */
         @media (min-width: 601px) and (max-width: 1024px) {
             .viewport-scaler {
                 transform: translateY(-8px);
@@ -301,7 +301,7 @@
         .btn-icon-custom:active { transform: scale(0.95) translateY(0); }
         .btn-icon-custom svg { width: 16px; height: 16px; fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* [To-Do 서랍 및 토글 버튼 - 태블릿 전체화면에서도 바닥 밀착] */
+        /* [To-Do 서랍 및 토글 버튼] */
         .todo-toggle-btn {
             background-color: rgba(255, 255, 255, 0.25); 
             border: 1px solid rgba(255, 255, 255, 0.3); 
@@ -353,14 +353,27 @@
             bottom: 0 !important; 
         }
 
-        /* 태블릿 전용 서랍 규격 (일반 창 & 전체화면 모두 적용) */
+        /* [태블릿 일반 창 및 전체화면 환경 강제 고정] */
         @media (min-width: 601px) and (max-width: 1024px) {
-            .todo-drawer {
+            .todo-toggle-btn,
+            :fullscreen .todo-toggle-btn,
+            :-webkit-full-screen .todo-toggle-btn,
+            body.pseudo-fullscreen .todo-toggle-btn {
+                bottom: 0 !important;
+                bottom: env(safe-area-inset-bottom, 0px) !important;
+            }
+            .todo-drawer,
+            :fullscreen .todo-drawer,
+            :-webkit-full-screen .todo-drawer,
+            body.pseudo-fullscreen .todo-drawer {
                 width: 440px;
                 height: 300px;
                 bottom: -340px;
             }
-            .todo-toggle-btn.drawer-open {
+            .todo-toggle-btn.drawer-open,
+            :fullscreen .todo-toggle-btn.drawer-open,
+            :-webkit-full-screen .todo-toggle-btn.drawer-open,
+            body.pseudo-fullscreen .todo-toggle-btn.drawer-open {
                 bottom: calc(300px + env(safe-area-inset-bottom, 0px)) !important;
             }
         }
@@ -493,20 +506,26 @@
             -webkit-backdrop-filter: blur(8px);
             color: #ffffff;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
             z-index: 100;
             transition: all 0.2s ease;
             -webkit-tap-highlight-color: transparent;
+            padding: 0;
         }
         .top-action-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08); }
-        .top-action-btn svg { width: 22px; height: 22px; }
+        .top-action-btn svg { 
+            width: 22px; 
+            height: 22px; 
+            display: block; 
+            margin: auto; 
+        }
 
         .settings-btn { right: 20px; }
         .mute-btn { right: 68px; }
 
-        /* [PC 및 태블릿: 모서리에서 살짝 안쪽(32px)으로 배치] */
+        /* PC 및 태블릿 모서리 여백 */
         @media (min-width: 601px) {
             .fullscreen-btn {
                 left: 32px;
@@ -529,7 +548,7 @@
     <div class="ambient-stars-container" id="ambient-container"></div>
     <div class="shooting-star" id="shooting-star-element"></div>
 
-    <!-- 우측 상단 음소거 버튼 (중앙 정렬 완벽 유지) -->
+    <!-- 우측 상단 음소거 버튼 -->
     <button class="top-action-btn mute-btn" id="mute-toggle-btn" onclick="toggleMute()" title="음소거 켜기/끄기">
         <svg id="mute-icon" viewBox="0 0 24 24">
             <!-- 기본: 소리 켜짐 (중앙 정렬 스피커 + 음파) -->
@@ -686,10 +705,10 @@
             <path d="M11 5L6 9H3v6h3l5 4V5z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
             <path d="M15.5 8.5c1 1 1 3.5 0 5M18.5 6c2.5 2.5 2.5 7.5 0 10" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
         `;
-        // 음소거: 동일 위치 스피커 실루엣 + 스피커 윤곽에 딱 맞게 짧아진 대각선 사선 빗금
+        // 음소거: 스피커 윤곽에 딱 맞게 짧아진 대각선 빗금 (길이 단축: 5.5 -> 18.5)
         const ICON_SOUND_MUTED = `
             <path d="M11 5L6 9H3v6h3l5 4V5z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
-            <line x1="4.5" y1="4.5" x2="19.5" y2="19.5" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round"/>
+            <line x1="5.5" y1="5.5" x2="18.5" y2="18.5" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
         `;
 
         function updateMuteDisplay() {
@@ -881,7 +900,8 @@
             let cycleStartTime = performance.now();
 
             activeAudio.currentTime = 0;
-            activeAudio.volume = (mode === 'focus') ? 0.0 : 0.9;
+            // 포커스 모드 기본 볼륨 상향: 0.3에서 시작
+            activeAudio.volume = (mode === 'focus') ? 0.3 : 1.0;
             activeAudio.play().catch(() => {});
 
             audioLoopInterval = setInterval(() => {
@@ -892,23 +912,24 @@
                     cycleStartTime = performance.now();
                     activeAudio.currentTime = 0;
                     if (mode === 'focus') isFocusFirstRun = false;
-                    if (mode !== 'focus') activeAudio.volume = 0.9;
+                    if (mode !== 'focus') activeAudio.volume = 1.0;
                     activeAudio.play().catch(() => {});
                     return;
                 }
 
                 if (mode === 'focus') {
-                    if (isFocusFirstRun && elapsedInCycle <= 5.0) {
-                        activeAudio.volume = Math.min(0.95, (elapsedInCycle / 5.0) * 0.95);
+                    // 3초 내에 최대 볼륨(1.0)으로 도달하도록 상향
+                    if (isFocusFirstRun && elapsedInCycle <= 3.0) {
+                        activeAudio.volume = Math.min(1.0, 0.3 + (elapsedInCycle / 3.0) * 0.7);
                     } else {
-                        activeAudio.volume = 0.95;
+                        activeAudio.volume = 1.0;
                     }
                 } else {
                     if (elapsedInCycle >= 12.0) {
                         const fadeRatio = (14.0 - elapsedInCycle) / 2.0;
-                        activeAudio.volume = Math.max(0.01, fadeRatio * 0.9);
+                        activeAudio.volume = Math.max(0.01, fadeRatio * 1.0);
                     } else {
-                        activeAudio.volume = 0.9;
+                        activeAudio.volume = 1.0;
                     }
                 }
             }, 50);
