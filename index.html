@@ -154,7 +154,7 @@
             transition: transform 0.1s ease;
         }
 
-        /* 모바일에서만 투두 제외 상단 1cm 상향 이동 */
+        /* 모바일에서만 타이머 본체 상단 1cm 상향 이동 */
         @media (max-width: 600px) {
             .viewport-scaler {
                 transform: translateY(-38px);
@@ -301,7 +301,7 @@
         .btn-icon-custom:active { transform: scale(0.95) translateY(0); }
         .btn-icon-custom svg { width: 16px; height: 16px; fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* [To-Do 서랍 (모바일 / 태블릿 반응형)] */
+        /* [To-Do 서랍 및 토글 버튼 - 태블릿 전체화면에서도 바닥 밀착] */
         .todo-toggle-btn {
             background-color: rgba(255, 255, 255, 0.25); 
             border: 1px solid rgba(255, 255, 255, 0.3); 
@@ -315,7 +315,8 @@
             border-radius: 20px 20px 0 0; 
             cursor: pointer;
             position: fixed; 
-            bottom: env(safe-area-inset-bottom, 0px); 
+            bottom: 0 !important;
+            bottom: env(safe-area-inset-bottom, 0px) !important; 
             left: 50%; 
             transform: translateX(-50%); 
             transition: bottom 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.2s; 
@@ -325,7 +326,7 @@
         }
         .todo-toggle-btn:hover { background-color: rgba(255, 255, 255, 0.35); }
         .todo-toggle-btn.drawer-open { 
-            bottom: calc(290px + env(safe-area-inset-bottom, 0px)); 
+            bottom: calc(290px + env(safe-area-inset-bottom, 0px)) !important; 
         }
 
         .todo-drawer {
@@ -349,21 +350,18 @@
             z-index: 99;
         }
         .todo-drawer.open { 
-            bottom: 0; 
+            bottom: 0 !important; 
         }
 
-        /* 태블릿 전용 투두 서랍: 바닥선(0px)에 단단히 고정 */
+        /* 태블릿 전용 서랍 규격 (일반 창 & 전체화면 모두 적용) */
         @media (min-width: 601px) and (max-width: 1024px) {
-            .todo-toggle-btn {
-                bottom: 0 !important;
-            }
             .todo-drawer {
                 width: 440px;
                 height: 300px;
                 bottom: -340px;
             }
             .todo-toggle-btn.drawer-open {
-                bottom: 300px !important;
+                bottom: calc(300px + env(safe-area-inset-bottom, 0px)) !important;
             }
         }
 
@@ -458,7 +456,7 @@
         .custom-alert-btn { background-color: #6A55C9; color: white; border: none; padding: 11px 36px; font-size: 14px; font-weight: bold; border-radius: 16px; cursor: pointer; transition: background 0.2s; -webkit-tap-highlight-color: transparent; }
         .custom-alert-btn:hover { background-color: #8E79E7; }
 
-        /* [좌측 하단 전체화면 버튼: 기본 모바일 모서리 규격] */
+        /* [좌측 하단 전체화면 버튼] */
         .fullscreen-btn {
             position: fixed; 
             left: 20px; 
@@ -482,7 +480,7 @@
         .fullscreen-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08); }
         .fullscreen-btn svg { width: 20px; height: 20px; fill: none; stroke: #ffffff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* [우측 상단 액션 버튼: 기본 모바일 모서리 규격] */
+        /* [우측 상단 액션 버튼 공통] */
         .top-action-btn {
             position: fixed;
             top: 20px;
@@ -503,12 +501,12 @@
             -webkit-tap-highlight-color: transparent;
         }
         .top-action-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08); }
-        .top-action-btn svg { width: 20px; height: 20px; fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .top-action-btn svg { width: 22px; height: 22px; }
 
         .settings-btn { right: 20px; }
         .mute-btn { right: 68px; }
 
-        /* [PC 및 태블릿: 모서리에서 살짝 안쪽(32px)으로 여유 있게 들여놓기] */
+        /* [PC 및 태블릿: 모서리에서 살짝 안쪽(32px)으로 배치] */
         @media (min-width: 601px) {
             .fullscreen-btn {
                 left: 32px;
@@ -521,7 +519,7 @@
                 right: 32px;
             }
             .mute-btn {
-                right: 84px; /* 설정 버튼 기준 적정 간격 유지 */
+                right: 84px;
             }
         }
     </style>
@@ -531,18 +529,18 @@
     <div class="ambient-stars-container" id="ambient-container"></div>
     <div class="shooting-star" id="shooting-star-element"></div>
 
-    <!-- 우측 상단 음소거 버튼 -->
+    <!-- 우측 상단 음소거 버튼 (중앙 정렬 완벽 유지) -->
     <button class="top-action-btn mute-btn" id="mute-toggle-btn" onclick="toggleMute()" title="음소거 켜기/끄기">
         <svg id="mute-icon" viewBox="0 0 24 24">
-            <!-- 기본: 소리 켜짐 아이콘 -->
+            <!-- 기본: 소리 켜짐 (중앙 정렬 스피커 + 음파) -->
             <path d="M11 5L6 9H3v6h3l5 4V5z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
-            <path d="M15.5 8.5c1 1 1 3.5 0 5M18.5 6c2.5 2.5 2.5 7.5 0 10" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+            <path d="M15.5 8.5c1 1 1 3.5 0 5M18.5 6c2.5 2.5 2.5 7.5 0 10" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
         </svg>
     </button>
 
     <!-- 우측 상단 설정 버튼 -->
     <button class="top-action-btn settings-btn" id="settings-toggle-btn" onclick="openSettings()" title="설정">
-        <svg viewBox="0 0 24 24">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"></circle>
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
         </svg>
@@ -680,18 +678,18 @@
         const mainContentBox = document.getElementById('main-content-box');
         const muteIcon = document.getElementById('mute-icon');
 
-        /* [음소거 로직 및 요청 이미지 100% 일치 아이콘] */
+        /* [음소거 로직 및 완벽한 중앙 정렬 스피커/단축 빗금 아이콘] */
         let isMuted = localStorage.getItem(`potato-muted-${userId}`) === 'true';
 
-        // 소리 켜짐 (면 채움 스피커 + 둥근 음파)
+        // 켜짐: 중앙 정렬 스피커 + 음파
         const ICON_SOUND_ON = `
             <path d="M11 5L6 9H3v6h3l5 4V5z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
-            <path d="M15.5 8.5c1 1 1 3.5 0 5M18.5 6c2.5 2.5 2.5 7.5 0 10" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+            <path d="M15.5 8.5c1 1 1 3.5 0 5M18.5 6c2.5 2.5 2.5 7.5 0 10" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
         `;
-        // 음소거 (보내주신 이미지 그대로: 면 채움 스피커 위를 길게 가로지르는 사선 빗금)
+        // 음소거: 동일 위치 스피커 실루엣 + 스피커 윤곽에 딱 맞게 짧아진 대각선 사선 빗금
         const ICON_SOUND_MUTED = `
             <path d="M11 5L6 9H3v6h3l5 4V5z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
-            <line x1="2" y1="2" x2="22" y2="22" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="4.5" y1="4.5" x2="19.5" y2="19.5" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round"/>
         `;
 
         function updateMuteDisplay() {
@@ -1302,7 +1300,7 @@
             renderTodos();
         }
 
-        /* [부드럽고 둥근 모서리 전체화면 / 축소 아이콘] */
+        /* [아이콘 SVG 정의] */
         const ICON_ENTER_FULLSCREEN = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke-linecap="round" stroke-linejoin="round"/>';
         const ICON_EXIT_FULLSCREEN = `
             <path d="M4 10h3.5a1.5 1.5 0 0 0 1.5-1.5V5" stroke-linecap="round" stroke-linejoin="round"/>
