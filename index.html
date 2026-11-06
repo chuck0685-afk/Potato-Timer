@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <!-- 사파리 웹앱 전체화면 메타태그 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Potato Timer</title>
@@ -28,6 +27,7 @@
             overflow: hidden;
             width: 100%;
             height: 100%;
+            height: 100dvh;
             margin: 0;
             padding: 0;
         }
@@ -44,6 +44,7 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            min-height: 100dvh;
             user-select: none;
             -webkit-user-select: none;
             position: relative;
@@ -55,6 +56,7 @@
             left: 0 !important;
             width: 100vw !important;
             height: 100vh !important;
+            height: 100dvh !important;
             z-index: 999999 !important;
         }
 
@@ -150,6 +152,13 @@
             transition: transform 0.1s ease;
         }
 
+        /* [태블릿 및 모바일: 투두 제외 전체 1cm 상향 이동] */
+        @media (max-width: 1024px) {
+            .viewport-scaler {
+                transform: translateY(-38px); /* 약 1cm 위로 이동 */
+            }
+        }
+
         .header-area { 
             display: flex; 
             flex-direction: column; 
@@ -160,7 +169,6 @@
         }
         .stats-date { font-size: 14px; opacity: 0.75; font-weight: bold; margin-bottom: 12px; letter-spacing: 0.2px; }
         
-        /* h1 타이틀 및 P 크기와 일치시킨 감자 이미지 */
         h1 { 
             font-size: 26px; 
             margin: 0; 
@@ -174,9 +182,9 @@
         
         .potato-study-img {
             width: auto;
-            height: 38px; /* 몸통이 대문자 P 세로 높이에 딱 맞도록 확대 */
+            height: 38px;
             object-fit: contain;
-            vertical-align: -7px; /* 새싹을 제외한 감자 발끝을 글자 바닥에 정렬 */
+            vertical-align: -7px;
             margin-right: 6px;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
@@ -269,21 +277,56 @@
         .btn-icon-custom:active { transform: scale(0.95) translateY(0); }
         .btn-icon-custom svg { width: 16px; height: 16px; fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* [To-Do 서랍] */
+        /* [To-Do 서랍 (사파리 하단바/홈바 Safe Area 보정)] */
         .todo-toggle-btn {
-            background-color: rgba(255, 255, 255, 0.25); border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            color: #ffffff; font-family: inherit; font-size: 15px; font-weight: bold; padding: 8px 24px; border-radius: 20px 20px 0 0; cursor: pointer;
-            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); transition: bottom 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.2s; box-shadow: 0 -2px 10px rgba(0,0,0,0.15); z-index: 100;
+            background-color: rgba(255, 255, 255, 0.25); 
+            border: 1px solid rgba(255, 255, 255, 0.3); 
+            backdrop-filter: blur(8px); 
+            -webkit-backdrop-filter: blur(8px);
+            color: #ffffff; 
+            font-family: inherit; 
+            font-size: 15px; 
+            font-weight: bold; 
+            padding: 8px 24px; 
+            border-radius: 20px 20px 0 0; 
+            cursor: pointer;
+            position: fixed; 
+            bottom: env(safe-area-inset-bottom, 0px); /* 사파리 하단바 위로 정확히 밀착 */
+            left: 50%; 
+            transform: translateX(-50%); 
+            transition: bottom 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.2s; 
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.15); 
+            z-index: 100;
         }
         .todo-toggle-btn:hover { background-color: rgba(255, 255, 255, 0.35); }
-        .todo-toggle-btn.drawer-open { bottom: 290px; }
+        .todo-toggle-btn.drawer-open { 
+            bottom: calc(290px + env(safe-area-inset-bottom, 0px)); 
+        }
 
         .todo-drawer {
-            position: fixed; bottom: -290px; left: 50%; transform: translateX(-50%); width: 360px; max-width: 92vw; height: 290px;
-            background-color: rgba(11, 20, 36, 0.95); border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 24px 24px 0 0; box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.4); transition: bottom 0.3s cubic-bezier(0.25, 1, 0.5, 1); padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; z-index: 99;
+            position: fixed; 
+            bottom: -320px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 360px; 
+            max-width: 92vw; 
+            height: 290px;
+            background-color: rgba(11, 20, 36, 0.95); 
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 24px 24px 0 0; 
+            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.4); 
+            transition: bottom 0.3s cubic-bezier(0.25, 1, 0.5, 1); 
+            padding: 20px; 
+            padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); 
+            box-sizing: border-box; 
+            display: flex; 
+            flex-direction: column; 
+            z-index: 99;
         }
-        .todo-drawer.open { bottom: 0; }
+        .todo-drawer.open { 
+            bottom: 0; 
+        }
+
         .todo-form { display: flex; gap: 8px; margin-bottom: 12px; align-items: flex-end; }
         
         .todo-input { 
@@ -378,7 +421,7 @@
         .fullscreen-btn {
             position: fixed; 
             left: 20px; 
-            bottom: 20px; 
+            bottom: calc(20px + env(safe-area-inset-bottom, 0px)); 
             width: 42px; 
             height: 42px; 
             border-radius: 50%;
@@ -397,10 +440,9 @@
         .fullscreen-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08); }
         .fullscreen-btn svg { width: 20px; height: 20px; fill: none; stroke: #ffffff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* [우측 상단 설정 버튼] */
-        .settings-btn {
+        /* [우측 상단 버튼 공통 (음소거 버튼 & 설정 버튼)] */
+        .top-action-btn {
             position: fixed;
-            right: 20px;
             top: 20px;
             width: 42px;
             height: 42px;
@@ -417,8 +459,11 @@
             z-index: 100;
             transition: all 0.2s ease;
         }
-        .settings-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08); }
-        .settings-btn svg { width: 20px; height: 20px; fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .top-action-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08); }
+        .top-action-btn svg { width: 20px; height: 20px; fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+        .settings-btn { right: 20px; }
+        .mute-btn { right: 68px; } /* 설정 바로 왼쪽 배치 */
     </style>
 </head>
 <body>
@@ -426,8 +471,17 @@
     <div class="ambient-stars-container" id="ambient-container"></div>
     <div class="shooting-star" id="shooting-star-element"></div>
 
+    <!-- 우측 상단 음소거 버튼 (설정 바로 왼쪽) -->
+    <button class="top-action-btn mute-btn" id="mute-toggle-btn" onclick="toggleMute()" title="음소거 켜기/끄기">
+        <svg id="mute-icon" viewBox="0 0 24 24">
+            <!-- 기본: 소리 켜짐 아이콘 -->
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
     <!-- 우측 상단 설정 버튼 -->
-    <button class="settings-btn" id="settings-toggle-btn" onclick="openSettings()" title="설정">
+    <button class="top-action-btn settings-btn" id="settings-toggle-btn" onclick="openSettings()" title="설정">
         <svg viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="3"></circle>
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
@@ -564,6 +618,34 @@
         const statsCounterEl = document.getElementById('stats-counter-string');
         const fsIcon = document.getElementById('fs-icon');
         const mainContentBox = document.getElementById('main-content-box');
+        const muteIcon = document.getElementById('mute-icon');
+
+        /* [음소거 로직 및 아이콘 정의] */
+        let isMuted = localStorage.getItem(`potato-muted-${userId}`) === 'true';
+
+        const ICON_SOUND_ON = `
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        `;
+        const ICON_SOUND_MUTED = `
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="23" y1="9" x2="17" y2="15" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="17" y1="9" x2="23" y2="15" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+        `;
+
+        function updateMuteDisplay() {
+            muteIcon.innerHTML = isMuted ? ICON_SOUND_MUTED : ICON_SOUND_ON;
+            document.getElementById('mute-toggle-btn').title = isMuted ? "소리 켜기" : "소리 끄기 (음소거)";
+            if (activeAudio) {
+                activeAudio.muted = isMuted;
+            }
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            localStorage.setItem(`potato-muted-${userId}`, isMuted.toString());
+            updateMuteDisplay();
+        }
 
         /* 반응형 스케일 계산 */
         function adjustLayoutScale() {
@@ -719,6 +801,7 @@
             let srcIdx = 0;
             const audio = new Audio(sources[0]);
             audio.preload = 'auto';
+            audio.muted = isMuted; // 음소거 상태 즉시 적용
             audio.onerror = () => {
                 srcIdx++;
                 if (srcIdx < sources.length) {
@@ -732,6 +815,7 @@
         function startInfiniteAudioLoop(mode) {
             stopAudioEngine();
             activeAudio = createAudioInstance(mode);
+            activeAudio.muted = isMuted;
             isFocusFirstRun = true;
 
             const cycleDuration = 14.0;
@@ -1157,10 +1241,8 @@
             renderTodos();
         }
 
-        /* [부드럽고 둥근 모서리(Arc)를 적용한 전체화면 / 축소 아이콘] */
+        /* [부드럽고 둥근 모서리(Arc) 전체화면 / 축소 아이콘] */
         const ICON_ENTER_FULLSCREEN = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke-linecap="round" stroke-linejoin="round"/>';
-        
-        // 보내주신 이미지 기반 둥글둥글한 모서리 축소 아이콘 (Radius Arc 적용)
         const ICON_EXIT_FULLSCREEN = `
             <path d="M4 10h3.5a1.5 1.5 0 0 0 1.5-1.5V5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M20 10h-3.5a1.5 1.5 0 0 1-1.5-1.5V5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1178,7 +1260,6 @@
         const isEmbedded = window.self !== window.top;
 
         function toggleFullScreen() {
-            // 사파리 하단바 최소화 트리거
             window.scrollTo(0, 1);
 
             if (isEmbedded) {
@@ -1249,6 +1330,7 @@
         renderTodos();
         initCloudSync();
         adjustLayoutScale();
+        updateMuteDisplay();
         setTimeout(triggerShootingStar, 1500);
     </script>
 </body>
