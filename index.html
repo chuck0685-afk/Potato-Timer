@@ -2,8 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <!-- 모바일 더블탭 확대 방지 뷰포트 설정 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Potato Timer</title>
     
     <!-- Firebase SDK -->
@@ -11,7 +10,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <style>
-        /* 내 저장소의 IM혜민체 로드 */
         @font-face {
             font-family: 'IM_Hyemin';
             src: url('./hyemin.ttf') format('truetype');
@@ -40,18 +38,15 @@
             background-color: #0b1424;
             color: #ffffff;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: 20px;
-            padding-bottom: 80px; 
             user-select: none;
             -webkit-user-select: none;
             position: relative;
         }
 
-        /* [노션 임베드 전용 가상 전체화면 클래스] */
+        /* 노션 및 모바일 가상 전체화면 클래스 */
         body.pseudo-fullscreen {
             position: fixed !important;
             top: 0 !important;
@@ -59,10 +54,8 @@
             width: 100vw !important;
             height: 100vh !important;
             z-index: 999999 !important;
-            background-size: cover !important;
         }
 
-        /* 타이머 숫자, 버튼, 입력창, 투두 영역 전체 강제 적용 */
         button, input, textarea, div, span, p {
             font-family: 'IM_Hyemin', sans-serif !important;
         }
@@ -134,13 +127,38 @@
             100% { transform: translate(var(--move-x), var(--move-y)) rotate(45deg) scaleX(0.1); opacity: 0; }
         }
 
-        /* [2부] 레이아웃 규격 */
-        .main-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; max-width: 500px; position: relative; z-index: 5; }
-        .header-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 25px; text-shadow: 0 2px 4px rgba(0,0,0,0.6); text-align: center; }
+        /* [PC 비율 기준 고정 래퍼 - 모바일/태블릿에서도 동일 비율로 축척 조정] */
+        .viewport-scaler {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 5;
+        }
+
+        .main-wrapper { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            width: 480px; 
+            transform-origin: center center;
+            transition: transform 0.1s ease;
+        }
+
+        .header-area { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            margin-bottom: 25px; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6); 
+            text-align: center; 
+        }
         .stats-date { font-size: 14px; opacity: 0.75; font-weight: bold; margin-bottom: 12px; letter-spacing: 0.2px; }
         h1 { font-size: 26px; margin: 0; font-weight: 900; letter-spacing: -0.5px; line-height: 1; display: flex; align-items: center; justify-content: center; }
         
-        /* 공부하는 수채화 감자 아이콘 이미지 */
         .potato-study-img {
             width: 32px;
             height: 32px;
@@ -165,7 +183,6 @@
 
         .timer-row-wrapper { display: flex; align-items: center; justify-content: center; gap: 32px; margin-bottom: 40px; height: 260px; width: 100%; }
         
-        /* 통일된 굵은 조절 버튼 (더블탭 확대 방지 속성 포함) */
         .adjust-btn { 
             font-family: inherit; 
             background: none; 
@@ -183,7 +200,7 @@
             padding: 0; 
             transition: transform 0.15s ease, opacity 0.15s; 
             outline: none; 
-            touch-action: manipulation; /* 모바일 더블탭 줌 무효화 */
+            touch-action: manipulation;
         }
         .adjust-btn:hover { transform: scale(1.2); }
         .adjust-btn:active { opacity: 0.7; }
@@ -239,17 +256,17 @@
         .btn-icon-custom:active { transform: scale(0.95) translateY(0); }
         .btn-icon-custom svg { width: 16px; height: 16px; fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* [3부] 투두 서랍 */
+        /* [To-Do 서랍 (비율 완전 고정)] */
         .todo-toggle-btn {
             background-color: rgba(255, 255, 255, 0.25); border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             color: #ffffff; font-family: inherit; font-size: 15px; font-weight: bold; padding: 8px 24px; border-radius: 20px 20px 0 0; cursor: pointer;
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); transition: bottom 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.2s; box-shadow: 0 -2px 10px rgba(0,0,0,0.15); z-index: 100;
         }
         .todo-toggle-btn:hover { background-color: rgba(255, 255, 255, 0.35); }
-        .todo-toggle-btn.drawer-open { bottom: 280px; }
+        .todo-toggle-btn.drawer-open { bottom: 290px; }
 
         .todo-drawer {
-            position: fixed; bottom: -280px; left: 50%; transform: translateX(-50%); width: 340px; height: 280px;
+            position: fixed; bottom: -290px; left: 50%; transform: translateX(-50%); width: 360px; max-width: 92vw; height: 290px;
             background-color: rgba(11, 20, 36, 0.95); border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 24px 24px 0 0; box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.4); transition: bottom 0.3s cubic-bezier(0.25, 1, 0.5, 1); padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; z-index: 99;
         }
@@ -328,13 +345,8 @@
             transform: scale(0.92) translateY(12px); 
             transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s ease;
         }
-        .custom-alert-box.wide {
-            width: 360px;
-            padding: 36px 28px;
-        }
-        .custom-alert-overlay.show .custom-alert-box { 
-            transform: scale(1) translateY(0); 
-        }
+        .custom-alert-box.wide { width: 360px; padding: 36px 28px; }
+        .custom-alert-overlay.show .custom-alert-box { transform: scale(1) translateY(0); }
         
         .custom-alert-text { 
             font-size: 16px; 
@@ -352,55 +364,51 @@
         .custom-alert-btn { background-color: #6A55C9; color: white; border: none; padding: 11px 36px; font-size: 14px; font-weight: bold; border-radius: 16px; cursor: pointer; transition: background 0.2s; }
         .custom-alert-btn:hover { background-color: #8E79E7; }
 
-        /* 전체화면 버튼 */
+        /* [좌측 하단 전체화면 버튼] */
         .fullscreen-btn {
-            position: fixed; right: 20px; bottom: 20px; width: 42px; height: 42px; border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #ffffff;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 100;
+            position: fixed; 
+            left: 20px; 
+            bottom: 20px; 
+            width: 42px; 
+            height: 42px; 
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.15); 
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px); 
+            -webkit-backdrop-filter: blur(8px); 
+            color: #ffffff;
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 100;
             transition: all 0.2s ease;
         }
         .fullscreen-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08); }
-        .fullscreen-btn svg { width: 18px; height: 18px; fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .fullscreen-btn svg { width: 20px; height: 20px; fill: none; stroke: #ffffff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* [태블릿 & 아이패드 최적화 (769px 이상 전체화면 포함)] */
-        @media (min-width: 769px) {
-            .todo-drawer {
-                width: 460px;
-                height: 320px;
-                bottom: -320px;
-            }
-            .todo-toggle-btn.drawer-open {
-                bottom: 320px;
-            }
-            .todo-toggle-btn {
-                font-size: 16px;
-                padding: 10px 28px;
-            }
+        /* [우측 상단 대각선 설정 버튼] */
+        .settings-btn {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: all 0.2s ease;
         }
-
-        /* [모바일 최적화 (768px 이하)] */
-        @media (max-width: 768px) {
-            body { padding-bottom: 70px; }
-            .stats-date { font-size: 12px; margin-bottom: 8px; }
-            h1 { font-size: 22px; letter-spacing: -0.3px; }
-            .potato-study-img { width: 28px; height: 28px; margin-right: 6px; }
-            .stats-counter { font-size: 15px; margin-top: 16px; }
-            .header-area { margin-bottom: 15px; }
-            .tabs { gap: 8px; margin-bottom: 25px; }
-            .tab-btn { width: 75px; height: 36px; font-size: 14px; }
-            .timer-row-wrapper { gap: 12px; margin-bottom: 30px; height: 210px; }
-            .timer-container { width: 210px; height: 210px; }
-            .time-display { font-size: 52px; }
-            .adjust-btn { width: 40px; height: 40px; font-size: 2.1rem; }
-            .controls { gap: 15px; }
-            .btn-start { width: 95px; height: 42px; font-size: 16px; }
-            .btn-icon-custom { width: 42px; height: 42px; }
-            .shooting-star { --star-len: 60px; }
-            .todo-drawer { width: 92%; }
-            .fullscreen-btn { right: 14px; bottom: 14px; width: 38px; height: 38px; }
-            .custom-alert-box.wide { width: 92%; padding: 32px 18px; }
-        }
+        .settings-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08); }
+        .settings-btn svg { width: 20px; height: 20px; fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     </style>
 </head>
 <body>
@@ -408,46 +416,56 @@
     <div class="ambient-stars-container" id="ambient-container"></div>
     <div class="shooting-star" id="shooting-star-element"></div>
 
-    <div class="main-wrapper">
-        <div class="header-area">
-            <div class="stats-date" id="stats-date-string">Monday Nov 2, 2026</div>
-            <h1 class="app-title">
-                <img src="./potato.png" alt="Potato" class="potato-study-img">
-                Potato Timer
-            </h1>
-            <div class="stats-counter" id="stats-counter-string">Today's Focus Time: 0 min</div>
-        </div>
+    <!-- 우측 상단 설정 버튼 -->
+    <button class="settings-btn" id="settings-toggle-btn" onclick="openSettings()" title="설정">
+        <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+    </button>
 
-        <div class="tabs">
-            <button class="tab-btn active" id="btn-focus" onclick="setMode('focus', 25)">Focus</button>
-            <button class="tab-btn" id="btn-short" onclick="setMode('short', 5)">Short</button>
-            <button class="tab-btn" id="btn-long" onclick="setMode('long', 15)">Long</button>
-        </div>
-
-        <div class="timer-row-wrapper">
-            <button class="adjust-btn btn-minus" onclick="adjustTime(-1)">-</button>
-            
-            <div class="timer-container">
-                <svg class="timer-svg" viewBox="0 0 240 240">
-                    <circle class="circle-bg" cx="120" cy="120" r="111"></circle>
-                    <circle class="circle-progress" id="progress" cx="120" cy="120" r="55"></circle>
-                </svg>
-                <div class="time-display" id="time-text">25:00</div>
+    <div class="viewport-scaler">
+        <div class="main-wrapper" id="main-content-box">
+            <div class="header-area">
+                <div class="stats-date" id="stats-date-string">Monday Nov 2, 2026</div>
+                <h1 class="app-title">
+                    <img src="./potato.png" alt="Potato" class="potato-study-img">
+                    Potato Timer
+                </h1>
+                <div class="stats-counter" id="stats-counter-string">Today's Focus Time: 0 min</div>
             </div>
 
-            <button class="adjust-btn btn-plus" onclick="adjustTime(1)">+</button>
-        </div>
+            <div class="tabs">
+                <button class="tab-btn active" id="btn-focus" onclick="setMode('focus', 25)">Focus</button>
+                <button class="tab-btn" id="btn-short" onclick="setMode('short', 5)">Short</button>
+                <button class="tab-btn" id="btn-long" onclick="setMode('long', 15)">Long</button>
+            </div>
 
-        <div class="controls">
-            <button class="btn btn-start" id="start-btn" onclick="toggleTimer()">Start</button>
-            
-            <button class="btn-icon-custom" onclick="pauseTimer()" title="일시정지">
-                <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="#ffffff" stroke="none"/></svg>
-            </button>
-            
-            <button class="btn-icon-custom" onclick="resetTimer()" title="초기화">
-                <svg viewBox="0 0 24 24"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
+            <div class="timer-row-wrapper">
+                <button class="adjust-btn btn-minus" onclick="adjustTime(-1)">-</button>
+                
+                <div class="timer-container">
+                    <svg class="timer-svg" viewBox="0 0 240 240">
+                        <circle class="circle-bg" cx="120" cy="120" r="111"></circle>
+                        <circle class="circle-progress" id="progress" cx="120" cy="120" r="55"></circle>
+                    </svg>
+                    <div class="time-display" id="time-text">25:00</div>
+                </div>
+
+                <button class="adjust-btn btn-plus" onclick="adjustTime(1)">+</button>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-start" id="start-btn" onclick="toggleTimer()">Start</button>
+                
+                <button class="btn-icon-custom" onclick="pauseTimer()" title="일시정지">
+                    <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="#ffffff" stroke="none"/></svg>
+                </button>
+                
+                <button class="btn-icon-custom" onclick="resetTimer()" title="초기화">
+                    <svg viewBox="0 0 24 24"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -470,9 +488,10 @@
         </div>
     </div>
 
-    <!-- 전체화면 토글 버튼 -->
+    <!-- 좌측 하단 전체화면 토글 버튼 -->
     <button class="fullscreen-btn" id="fullscreen-toggle-btn" onclick="toggleFullScreen()" title="전체화면 전환">
         <svg id="fs-icon" viewBox="0 0 24 24">
+            <!-- 기본: 바깥쪽으로 뻗은 전체화면 아이콘 -->
             <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
         </svg>
     </button>
@@ -538,6 +557,20 @@
         const statsDateEl = document.getElementById('stats-date-string');
         const statsCounterEl = document.getElementById('stats-counter-string');
         const fsIcon = document.getElementById('fs-icon');
+        const mainContentBox = document.getElementById('main-content-box');
+
+        /* [PC 기준 비율 완벽 동기화 반응형 스케일러] */
+        function adjustLayoutScale() {
+            const baseW = 480;
+            const baseH = 640;
+            const winW = window.innerWidth;
+            const winH = window.innerHeight;
+            
+            // 화면 크기에 맞게 비례 축소 (최대 1배율로 PC 기본 크기 유지)
+            const scaleFactor = Math.min(1, (winW - 30) / baseW, (winH - 90) / baseH);
+            mainContentBox.style.transform = `scale(${Math.max(0.68, scaleFactor)})`;
+        }
+        window.addEventListener('resize', adjustLayoutScale);
 
         function safeGetJSON(key, fallback) {
             try {
@@ -551,7 +584,6 @@
         let todos = safeGetJSON(`potato-todos-${userId}`, []);
         let accumulatedFocusSeconds = parseFloat(localStorage.getItem(`potato-focus-seconds-${userId}`)) || 0;
         let lastSavedDate = localStorage.getItem(`potato-last-date-${userId}`) || "";
-
         let isSyncingFromCloud = false;
 
         function saveState() {
@@ -1121,25 +1153,35 @@
             renderTodos();
         }
 
-        /* [아이콘 SVG 경로 정의: 확대 / 축소] */
+        /* [요청하신 아이콘 SVG: 바깥 확대 ↔ 안쪽 직각 꺾쇠 축소] */
         const ICON_ENTER_FULLSCREEN = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>';
-        const ICON_EXIT_FULLSCREEN = '<path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6l7 7M10 4v6m0 0H4m6 0L3 3m10 7h6m-6 0V4m0 6l7-7"/>';
+        // 보내주신 안쪽으로 모이는 4개의 꺾쇠 형태(╒ ╕ ╘ ╛)
+        const ICON_EXIT_FULLSCREEN = '<path d="M4 9h5V4m6 0v5h5M4 15h5v5m10-5h-5v5"/>';
 
         function updateFullscreenIcon(isFs) {
             fsIcon.innerHTML = isFs ? ICON_EXIT_FULLSCREEN : ICON_ENTER_FULLSCREEN;
             document.getElementById('fullscreen-toggle-btn').title = isFs ? "전체화면 종료" : "전체화면 전환";
+            adjustLayoutScale();
         }
 
-        /* [전체화면 토글 & 노션 가상 전체화면 폴백 로직] */
+        /* [노션 임베드 및 갤럭시 세로 고정 전체화면 로직] */
         let isPseudoFullscreen = false;
+        const isEmbedded = window.self !== window.top; // iframe(노션 등) 임베드 환경 확인
 
         function toggleFullScreen() {
+            // 노션 임베드 환경이면 브라우저 API 호출 없이 바로 가상 전체화면 모드 실행
+            if (isEmbedded) {
+                isPseudoFullscreen = !isPseudoFullscreen;
+                document.body.classList.toggle('pseudo-fullscreen', isPseudoFullscreen);
+                updateFullscreenIcon(isPseudoFullscreen);
+                return;
+            }
+
             const doc = document;
             const docEl = document.documentElement;
-            const isNativeFs = !!(doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement);
+            const isNativeFs = !!(doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement);
 
             if (isPseudoFullscreen) {
-                // 가상 전체화면 해제
                 isPseudoFullscreen = false;
                 document.body.classList.remove('pseudo-fullscreen');
                 updateFullscreenIcon(false);
@@ -1147,35 +1189,38 @@
             }
 
             if (!isNativeFs) {
-                // 네이티브 전체화면 시도
-                const reqFs = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
+                const reqFs = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.mozRequestFullScreen;
                 if (reqFs) {
                     reqFs.call(docEl).then(() => {
                         updateFullscreenIcon(true);
+                        // 갤럭시/안드로이드 세로 고정 실행
+                        if (screen.orientation && screen.orientation.lock) {
+                            screen.orientation.lock('portrait').catch(() => {});
+                        }
                     }).catch(() => {
-                        // 노션 등 iframe 권한 제한 환경일 경우 가상 전체화면으로 즉시 전환
+                        // 권한 오류 시 가상 전체화면
                         isPseudoFullscreen = true;
                         document.body.classList.add('pseudo-fullscreen');
                         updateFullscreenIcon(true);
                     });
                 } else {
-                    // 미지원 기기 가상 전체화면
                     isPseudoFullscreen = true;
                     document.body.classList.add('pseudo-fullscreen');
                     updateFullscreenIcon(true);
                 }
             } else {
-                // 네이티브 전체화면 해제
-                const exitFs = doc.exitFullscreen || doc.webkitExitFullscreen || doc.mozCancelFullScreen || doc.msExitFullscreen;
+                const exitFs = doc.exitFullscreen || doc.webkitExitFullscreen || doc.mozCancelFullScreen;
                 if (exitFs) {
                     exitFs.call(doc).then(() => {
                         updateFullscreenIcon(false);
+                        if (screen.orientation && screen.orientation.unlock) {
+                            screen.orientation.unlock();
+                        }
                     }).catch(() => {});
                 }
             }
         }
 
-        // 네이티브 전체화면 상태 변화 감지 (ESC 키 등으로 나갈 때 아이콘 복원)
         document.addEventListener('fullscreenchange', () => {
             const isFs = !!document.fullscreenElement;
             if (!isFs && !isPseudoFullscreen) {
@@ -1189,11 +1234,17 @@
             }
         });
 
-        /* 초기 구동 및 실시간 클라우드 리스너 */
+        function openSettings() {
+            // 설정 버튼 클릭 핸들러 (구체적인 설정 내용 주시면 여기에 바로 연결됩니다)
+            console.log("Settings button clicked");
+        }
+
+        /* 초기 구동 */
         checkMidnightReset();
         updateDisplay();
         renderTodos();
         initCloudSync();
+        adjustLayoutScale();
         setTimeout(triggerShootingStar, 1500);
     </script>
 </body>
