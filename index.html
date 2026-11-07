@@ -205,9 +205,7 @@
             display: flex; align-items: center; justify-content: center; line-height: 1;
             -webkit-tap-highlight-color: transparent;
         }
-        .tab-btn:hover:not(.active) { background-color: rgba(255, 255, 255, 0.9); }
         .tab-btn.active { background-color: #6A55C9; color: #ffffff; box-shadow: 0 4px 12px rgba(106, 85, 201, 0.5); }
-        .tab-btn.active:hover { background-color: #8E79E7; box-shadow: 0 4px 12px rgba(142, 121, 231, 0.6); }
 
         .timer-row-wrapper { 
             display: flex; 
@@ -249,8 +247,6 @@
             -webkit-user-select: none;
             user-select: none;
         }
-        .adjust-btn:hover { transform: scale(1.2) translateZ(0); }
-        .adjust-btn:active { opacity: 0.6; transform: scale(0.95) translateZ(0); background: transparent !important; }
 
         .timer-container { position: relative; width: 260px; height: 260px; display: flex; align-items: center; justify-content: center; }
         .timer-svg { transform: rotate(-90deg) translateZ(0); width: 100%; height: 100%; }
@@ -293,27 +289,50 @@
             line-height: 1; 
             -webkit-tap-highlight-color: transparent;
         }
-        .btn:hover { transform: translateY(-2px) translateZ(0); }
-        .btn-start { background-color: #6A55C9; color: #ffffff; font-size: 18px; font-weight: bold; padding: 0; width: 110px; height: 46px; border-radius: 23px; transition: background-color 0.2s ease, transform 0.2s ease; }
-        .btn-start:hover { background-color: #8E79E7 !important; }
+        .btn-start { background-color: #6A55C9; color: #ffffff; font-size: 18px; font-weight: bold; padding: 0; width: 110px; height: 46px; border-radius: 23px; transition: background-color 0.1s ease, transform 0.1s ease; }
 
         .btn-icon-custom { 
             background-color: rgba(255, 255, 255, 0.12); 
             border: 1px solid rgba(255, 255, 255, 0.25); 
             color: #ffffff; width: 46px; height: 46px; border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
-            transition: background 0.2s, border-color 0.2s, transform 0.2s ease; 
+            transition: background 0.1s, border-color 0.1s, transform 0.1s ease; 
             cursor: pointer;
             z-index: 10;
             -webkit-tap-highlight-color: transparent;
         }
-        .btn-icon-custom:hover { 
-            background-color: rgba(255, 255, 255, 0.25); 
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-2px) translateZ(0);
-        }
-        .btn-icon-custom:active { transform: scale(0.95) translateY(0) translateZ(0); }
         .btn-icon-custom svg { width: 16px; height: 16px; fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* [버튼 누름(Active) 상태 명확한 피드백 부여 - 손 떼면 즉시 원복] */
+        .btn-start:active { background-color: #5542a8 !important; transform: scale(0.95) translateZ(0) !important; filter: brightness(0.9); }
+        .tab-btn:active { background-color: rgba(255, 255, 255, 0.9); transform: scale(0.95) translateZ(0); filter: brightness(0.9); }
+        .tab-btn.active:active { background-color: #5542a8; }
+        .adjust-btn:active { opacity: 0.5; transform: scale(0.92) translateZ(0); background: transparent !important; }
+        .btn-icon-custom:active { background-color: rgba(255, 255, 255, 0.3); transform: scale(0.92) translateZ(0); }
+        .top-action-btn:active, .bottom-action-btn:active { transform: scale(0.92) translateZ(0); background-color: rgba(255, 255, 255, 0.35); }
+        .todo-toggle-btn:active { background-color: rgba(255, 255, 255, 0.4); transform: translateX(-50%) scale(0.97) translateZ(0) !important; }
+        .todo-add-btn:active { background-color: #5542a8; transform: scale(0.95) translateZ(0); }
+        .custom-alert-btn:active { background-color: #5542a8; transform: scale(0.95) translateZ(0); }
+        .settings-close-btn:active { color: #ff4d4f !important; transform: scale(0.9); }
+        .todo-del-btn:active { color: #ff5b5b; transform: scale(0.9); }
+
+        /* [PC 전용 호버링 - 모바일 잔상 완전 격리] */
+        @media (hover: hover) {
+            .tab-btn:hover:not(.active) { background-color: rgba(255, 255, 255, 0.9); }
+            .tab-btn.active:hover { background-color: #8E79E7; box-shadow: 0 4px 12px rgba(142, 121, 231, 0.6); }
+            .adjust-btn:hover { transform: scale(1.2) translateZ(0); }
+            .btn-start:hover { background-color: #8E79E7 !important; }
+            .btn-icon-custom:hover { background-color: rgba(255, 255, 255, 0.25); border-color: rgba(255, 255, 255, 0.5); transform: translateY(-2px) translateZ(0); }
+            .todo-toggle-btn:hover { background-color: rgba(255, 255, 255, 0.35); }
+            .todo-add-btn:hover { background-color: #8E79E7; }
+            .todo-drag-handle:hover { color: #ffffff; }
+            .todo-del-btn:hover { color: #ff5b5b; }
+            .custom-alert-btn:hover { background-color: #8E79E7; }
+            .settings-close-btn:hover { color: #111111; }
+            .hourly-bar-col:hover .hourly-bar:not(.empty) { background: #8E79E7; }
+            .bottom-action-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08) translateZ(0); }
+            .top-action-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08) translateZ(0); }
+        }
 
         /* [뽀모도로 트래커 바] */
         .pomo-tracker-bar {
@@ -331,6 +350,7 @@
             align-items: center;
             gap: 6px;
             justify-content: flex-start;
+            transform: translateZ(0);
         }
 
         .pomo-star-icon {
@@ -338,16 +358,12 @@
             height: 18px;
             flex-shrink: 0;
             display: block;
-            transition: transform 0.2s ease, filter 0.2s ease;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            will-change: transform;
         }
         .pomo-star-icon.filled {
-            filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.9));
-            animation: starPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes starPop {
-            0% { transform: scale(0.6) translateZ(0); }
-            50% { transform: scale(1.3) translateZ(0); }
-            100% { transform: scale(1) translateZ(0); }
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.9));
         }
 
         .pomo-count-text {
@@ -378,6 +394,7 @@
             align-items: center;
             justify-content: flex-end;
             cursor: pointer;
+            transform: translateZ(0);
         }
 
         .pomo-toggle-switch {
@@ -391,6 +408,7 @@
             cursor: pointer;
             flex-shrink: 0;
             box-shadow: none !important;
+            transform: translateZ(0);
         }
         .pomo-toggle-switch.active {
             background-color: #6A55C9;
@@ -434,7 +452,6 @@
             z-index: 1000 !important;
             -webkit-tap-highlight-color: transparent;
         }
-        .todo-toggle-btn:hover { background-color: rgba(255, 255, 255, 0.35); }
         .todo-toggle-btn.drawer-open { 
             bottom: 290px !important; 
         }
@@ -481,20 +498,58 @@
             border: none; padding: 9px 12px; border-radius: 12px; font-size: 14px; color: #222222; outline: none;
             resize: none; height: 38px; line-height: 20px; max-height: 80px; box-sizing: border-box;
             display: block;
+            overflow-y: hidden;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
-        .todo-input::placeholder { line-height: 20px; color: #666666; }
-        .todo-add-btn { font-family: inherit; background-color: #6A55C9; color: white; border: none; height: 38px; padding: 0 16px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; transition: background 0.2s; -webkit-tap-highlight-color: transparent; }
-        .todo-add-btn:hover { background-color: #8E79E7; }
+        .todo-input::placeholder { line-height: 20px; color: #666666; vertical-align: middle; }
+        .todo-add-btn { font-family: inherit; background-color: #6A55C9; color: white; border: none; height: 38px; padding: 0 16px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; transition: background 0.1s; -webkit-tap-highlight-color: transparent; }
         
-        .todo-list { list-style: none; padding: 0; margin: 0; flex: 1; overflow-y: auto; user-select: text; -webkit-user-select: text; touch-action: pan-y !important;}
+        .todo-list { list-style: none; padding: 0; margin: 0; flex: 1; overflow-y: auto; user-select: text; -webkit-user-select: text; touch-action: pan-y !important; position: relative;}
         .todo-list::-webkit-scrollbar { width: 6px; }
         .todo-list::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.3); border-radius: 3px; }
         
-        .todo-item { display: flex; align-items: flex-start; background-color: rgba(255, 255, 255, 0.15); padding: 9px 12px; border-radius: 10px; margin-bottom: 6px; gap: 8px; transition: transform 0.2s, opacity 0.2s; touch-action: pan-y !important; }
-        .todo-item.dragging { opacity: 0.4; background-color: rgba(106, 85, 201, 0.3); }
-        .todo-item.drag-over { border-top: 2px solid #8E79E7; }
+        /* [투두 아이템 - 시각적 가이드 및 자연스러운 전환] */
+        .todo-item { 
+            display: flex; 
+            align-items: flex-start; 
+            background-color: rgba(255, 255, 255, 0.15); 
+            padding: 9px 12px; 
+            border-radius: 10px; 
+            margin-bottom: 6px; 
+            gap: 8px; 
+            transition: margin 0.2s ease, border 0.2s ease;
+            position: relative;
+        }
+
+        .todo-item.is-placeholder {
+            opacity: 0.3;
+            background-color: rgba(0,0,0,0.2) !important;
+            border: 1.5px dashed rgba(255,255,255,0.4);
+        }
+
+        .is-dragging-ghost {
+            position: fixed !important;
+            pointer-events: none !important;
+            z-index: 99999 !important;
+            opacity: 0.95;
+            background-color: rgba(106, 85, 201, 0.9) !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            border-radius: 10px;
+            transform: scale(1.02);
+            transition: none !important; 
+            margin: 0 !important;
+        }
+
+        .todo-item.drag-over-top {
+            border-top: 2.5px solid #ffffff;
+            margin-top: 8px; 
+        }
+        .todo-item.drag-over-bottom {
+            border-bottom: 2.5px solid #ffffff;
+            margin-bottom: 12px;
+        }
+
         .todo-item input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: #6A55C9; flex-shrink: 0; margin-top: 3px; }
         
         .todo-text { flex: 1; font-size: 14px; color: #ffffff; word-break: break-all; white-space: pre-wrap; text-align: left; font-weight: normal; line-height: 1.6; padding: 0 2px; }
@@ -505,13 +560,11 @@
             cursor: grab; display: flex; align-items: center; justify-content: center;
             padding: 3px 4px; color: rgba(255, 255, 255, 0.45); transition: color 0.15s; flex-shrink: 0; touch-action: none; margin-top: 1px;
         }
-        .todo-drag-handle:hover { color: #ffffff; }
         .todo-drag-handle:active { cursor: grabbing; }
         .todo-drag-handle svg { width: 14px; height: 14px; fill: currentColor; }
         .todo-item.completed .todo-drag-handle { display: none; }
 
         .todo-del-btn { background: none; border: none; color: rgba(255, 255, 255, 0.6); font-size: 18px; cursor: pointer; padding: 0 4px; transition: color 0.15s; flex-shrink: 0; line-height: 1; margin-top: 1px; -webkit-tap-highlight-color: transparent; }
-        .todo-del-btn:hover { color: #ff5b5b; }
 
         /* [완료 모달] */
         .custom-alert-overlay {
@@ -527,8 +580,7 @@
         .custom-alert-box.wide { width: 360px; padding: 36px 28px; }
         .custom-alert-overlay.show .custom-alert-box { transform: scale(1) translateY(0); }
         .custom-alert-text { font-size: 16px; font-weight: bold; margin: 0 0 26px 0; line-height: 1.4; white-space: nowrap; width: 100%; display: flex; align-items: center; justify-content: center; text-align: center; letter-spacing: -0.2px; }
-        .custom-alert-btn { background-color: #6A55C9; color: white; border: none; padding: 11px 36px; font-size: 14px; font-weight: bold; border-radius: 16px; cursor: pointer; transition: background 0.2s; -webkit-tap-highlight-color: transparent; }
-        .custom-alert-btn:hover { background-color: #8E79E7; }
+        .custom-alert-btn { background-color: #6A55C9; color: white; border: none; padding: 11px 36px; font-size: 14px; font-weight: bold; border-radius: 16px; cursor: pointer; transition: background 0.1s; -webkit-tap-highlight-color: transparent; }
 
         /* [환경설정 팝업 모달] */
         .settings-modal-overlay {
@@ -594,8 +646,6 @@
             padding: 0 4px;
             transition: color 0.15s, transform 0.1s;
         }
-        .settings-close-btn:hover { color: #111111; }
-        .settings-close-btn:active { color: #ff4d4f !important; transform: scale(0.9); }
 
         .settings-section-title {
             font-size: 15px;
@@ -811,7 +861,7 @@
             white-space: nowrap;
         }
 
-        /* [가장 잘 집중하는 시간대: 24시간 막대 차트 (좌우 여백 + 24시 줄바꿈 방지)] */
+        /* [가장 잘 집중하는 시간대: 24시간 막대 차트] */
         .hourly-chart-wrapper {
             width: 100%;
             height: 80px;
@@ -841,9 +891,6 @@
         .hourly-bar.empty {
             background: rgba(0, 0, 0, 0.06);
             height: 2px !important;
-        }
-        .hourly-bar-col:hover .hourly-bar:not(.empty) {
-            background: #8E79E7;
         }
         .hourly-axis-labels {
             position: relative;
@@ -905,7 +952,6 @@
             padding: 0;
             flex-shrink: 0;
         }
-        .bottom-action-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08) translateZ(0); }
         .bottom-action-btn svg { width: 20px; height: 20px; fill: none; stroke: #ffffff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
         .fullscreen-btn { left: 20px; }
@@ -933,7 +979,6 @@
             padding: 0;
             flex-shrink: 0;
         }
-        .top-action-btn:hover { background-color: rgba(255, 255, 255, 0.3); transform: scale(1.08) translateZ(0); }
         .top-action-btn svg { 
             width: 22px !important; 
             height: 22px !important; 
@@ -1140,7 +1185,7 @@
                 </div>
             </div>
 
-            <!-- 가장 잘 집중하는 시간대 (24H 막대 차트: 24시 안쪽 정돈 및 꺾임 방지) -->
+            <!-- 가장 잘 집중하는 시간대 (24H 막대 차트) -->
             <div class="stats-section-box" style="margin-bottom: 0;">
                 <div class="stats-section-header">
                     <span class="stats-section-heading">가장 잘 집중하는 시간대</span>
@@ -1257,6 +1302,7 @@
         let isAutoPomo = storedAutoPomo === 'true'; 
 
         let lastActiveTime = parseInt(localStorage.getItem(`potato-last-active-${userId}`), 10) || Date.now();
+        let actualFocusSecondsCompleted = 0; // 엄격한 25분 완주 조건용 누적 변수
 
         function updateLastActive() {
             lastActiveTime = Date.now();
@@ -1289,17 +1335,19 @@
 
         let isTooltipPinned = false;
 
-        /* [음소거 로직] */
+        /* [음소거 로직 - 아이콘 정밀 재조정] */
         let isMuted = localStorage.getItem(`potato-muted-${userId}`) === 'true';
 
         const ICON_SOUND_ON = `
-            <path d="M11 5L6 9H3v6h3l5 4V5z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
-            <path d="M15.5 8.5c1 1 1 3.5 0 5M18.5 6c2.5 2.5 2.5 7.5 0 10" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+            <g transform="translate(1, 0)">
+                <path d="M11 5L6 9H3v6h3l5 4V5z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M15.5 8.5c1 1 1 3.5 0 5M18.5 6c2.5 2.5 2.5 7.5 0 10" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+            </g>
         `;
         const ICON_SOUND_MUTED = `
-            <g transform="translate(1, 0)">
-                <path d="M13 6L8.5 9.5H5.5v5h3l4.5 3.5V6z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
-                <line x1="6.5" y1="6.5" x2="16.5" y2="16.5" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round"/>
+            <g transform="translate(5, 0)">
+                <path d="M11 5L6 9H3v6h3l5 4V5z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+                <line x1="2" y1="6" x2="12" y2="18" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
             </g>
         `;
 
@@ -1316,7 +1364,7 @@
             updateMuteDisplay();
         }
 
-        /* [뽀모도로 트래커: 실선 테두리 유지 + 내부 황금빛 채움] */
+        /* [뽀모도로 트래커] */
         function renderPomoTracker() {
             pomoStarsBox.innerHTML = '';
             for (let i = 0; i < 4; i++) {
@@ -1369,7 +1417,7 @@
             saveState();
         }
 
-        /* [모바일/PC 고속 연속 조절 핸들러] */
+        /* [시간 조절 핸들러] */
         function setupAdjustButton(btnId, deltaAmount) {
             const btn = document.getElementById(btnId);
             let holdTimer = null;
@@ -1496,19 +1544,22 @@
         let starTimeoutId = null;
         let slowDownSteps = 0;
 
-        /* [별똥별 전역 분산 발생 로직] */
+        /* [별똥별 전역 완전 랜덤 분산 엔진] */
         function triggerShootingStar() {
             const screenW = window.innerWidth || 800;
             const screenH = window.innerHeight || 600;
             
-            const startX = Math.floor(Math.random() * (screenW * 0.85)); 
-            const startY = Math.floor(Math.random() * (screenH * 0.7)); 
-            const diagonalMove = Math.floor(Math.random() * 250) + 260; 
+            const startX = Math.floor(Math.random() * screenW); 
+            const startY = Math.floor(Math.random() * (screenH * 0.8)); 
+            
+            const rotateAngle = Math.floor(Math.random() * 20) + 35; 
+            const diagonalMove = Math.floor(Math.random() * 300) + 200; 
             const starLen = Math.floor(Math.random() * 45) + 60; 
 
             starElement.style.setProperty('--move-x', `${diagonalMove}px`);
             starElement.style.setProperty('--move-y', `${diagonalMove}px`);
             starElement.style.setProperty('--star-len', `${starLen}px`);
+            starElement.style.transform = `rotate(${rotateAngle}deg) translateZ(0)`;
             starElement.style.left = `${startX}px`;
             starElement.style.top = `${startY}px`;
             
@@ -1554,7 +1605,7 @@
             milkyWayGlow.classList.remove('visible');
         }
 
-        /* [Web Audio API 하드웨어 증폭 & 페이드인 엔진] */
+        /* [Web Audio API 엔진] */
         let audioCtx = null;
         let gainNode = null;
         let audioSourceNode = null;
@@ -1663,7 +1714,7 @@
             return `${year}-${month}-${day}`;
         }
 
-        /* [자정 스마트 리셋 로직: 투두는 자정 즉시 삭제 / 집중시간·별은 2시간 유예] */
+        /* [자정 스마트 리셋 로직] */
         function checkMidnightReset() {
             const todayStr = getFormattedDate();
             
@@ -1717,7 +1768,7 @@
         function adjustTime(amount) {
             updateLastActive();
             const delta = amount * 60;
-            if (delta < 0 && timeRemaining <= 60) {
+            if (delta < 0 && timeRemaining <= 10) {
                 if (isTimerRunning) {
                     timeRemaining = 0;
                     updateDisplay();
@@ -1766,6 +1817,7 @@
 
             if (currentMode === 'focus') {
                 accumulatedFocusSeconds += elapsedSeconds;
+                actualFocusSecondsCompleted += elapsedSeconds;
                 recordFocusTime(elapsedSeconds);
                 updateStatsDisplay();
 
@@ -1792,7 +1844,6 @@
             if (timeRemaining <= 0) return;
             checkMidnightReset(); 
             isTimerRunning = true;
-            startBtn.style.backgroundColor = "#5542a8";
             lastTimestamp = null;
             targetEndTime = Date.now() + (timeRemaining * 1000);
             timerAnimationId = requestAnimationFrame(timerLoop);
@@ -1803,7 +1854,6 @@
             if (isTimerRunning) {
                 isTimerRunning = false;
                 cancelAnimationFrame(timerAnimationId);
-                startBtn.style.backgroundColor = "#6A55C9";
                 saveState();
                 stabilizeSkySmoothly();
             }
@@ -1813,11 +1863,11 @@
             updateLastActive();
             isTimerRunning = false;
             cancelAnimationFrame(timerAnimationId);
-            startBtn.style.backgroundColor = "#6A55C9";
             stopAudioEngine();
             const setting = modeSettings[currentMode];
             totalSeconds = setting.min * 60 + setting.sec;
             timeRemaining = totalSeconds;
+            actualFocusSecondsCompleted = 0; // 초과 획득 차단
             updateDisplay();
         }
 
@@ -1842,7 +1892,6 @@
             updateLastActive();
             isTimerRunning = false;
             cancelAnimationFrame(timerAnimationId);
-            startBtn.style.backgroundColor = "#6A55C9";
             
             startCelebrationVFX();
             startInfiniteAudioLoop(currentMode);
@@ -1867,13 +1916,9 @@
 
             const completedMode = currentMode;
 
-            // [엄격한 25분 이상 검증 방어 로직]
-            // 포커스 모드이고, 이번 세션의 누적 집중 시간이 25분(1,500초) 이상일 때만 별과 세트 획득 인정
+            // [수정 포인트: 정확히 25분 완주 조건 검증] (시스템 렉 오차 방어 위해 1498초 적용)
             if (completedMode === 'focus') {
-                const actualFocusSecThisSession = modeSettings.focus.min * 60 + modeSettings.focus.sec - timeRemaining;
-                const isRealTwentyFiveMinutes = (actualFocusSecThisSession >= 1500) || (modeSettings.focus.min >= 25);
-
-                if (isRealTwentyFiveMinutes) {
+                if (actualFocusSecondsCompleted >= 1498) {
                     if (pomoStars < 4) {
                         pomoStars++;
                     } else {
@@ -1886,6 +1931,7 @@
                     savePomoState();
                     renderPomoTracker();
                 }
+                actualFocusSecondsCompleted = 0; 
             }
 
             if (isAutoPomo) {
@@ -2058,22 +2104,40 @@
             return `${min}분`;
         }
 
+        /* [모든 대시보드 지표를 오늘 포함 최근 30일 데이터 기반으로 통합 연산] */
         function renderStatsDashboard() {
-            let activeDaysCount = 0;
-            let totalFocusSecAllTime = 0;
+            const today = new Date();
+            const last30DaysKeys = [];
+            for (let i = 29; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(d.getDate() - i);
+                last30DaysKeys.push(getDateKey(d));
+            }
 
-            const allDateKeys = Object.keys(focusHistory);
-            allDateKeys.forEach(dateKey => {
-                const daySec = focusHistory[dateKey].totalSeconds || 0;
-                if (daySec >= 300) {
-                    activeDaysCount++;
-                    totalFocusSecAllTime += daySec;
+            let activeDaysCount = 0;
+            let totalFocusSec30Days = 0;
+            let hourlyTotals30Days = new Array(24).fill(0); 
+
+            last30DaysKeys.forEach(dateKey => {
+                const dayData = focusHistory[dateKey];
+                if (dayData) {
+                    const daySec = dayData.totalSeconds || 0;
+                    if (daySec >= 300) {
+                        activeDaysCount++;
+                        totalFocusSec30Days += daySec;
+                    }
+                    const arr = dayData.hourly || [];
+                    for (let h = 0; h < 24; h++) {
+                        hourlyTotals30Days[h] += (arr[h] || 0);
+                    }
                 }
             });
 
+            // 1. 🔥 활동 일수
             document.getElementById('stats-active-days-val').textContent = `${activeDaysCount}일`;
 
-            const avgSec = activeDaysCount > 0 ? (totalFocusSecAllTime / activeDaysCount) : 0;
+            // 2. ⌛ 하루 평균
+            const avgSec = activeDaysCount > 0 ? (totalFocusSec30Days / activeDaysCount) : 0;
             const avgMin = Math.floor(avgSec / 60);
             if (avgMin >= 60) {
                 const h = Math.floor(avgMin / 60);
@@ -2084,7 +2148,8 @@
             }
 
             renderLineActivityChart();
-            renderHourlyDistributionChart();
+            // 3. 가장 잘 집중하는 시간대 (최근 30일치 데이터 한정)
+            renderHourlyDistributionChart(hourlyTotals30Days);
         }
 
         function renderLineActivityChart() {
@@ -2222,22 +2287,14 @@
             }
         }
 
-        function renderHourlyDistributionChart() {
+        function renderHourlyDistributionChart(hourlyTotals30Days) {
             const hourlyBox = document.getElementById('hourly-chart-box');
             hourlyBox.innerHTML = '';
 
-            const hourlyTotals = new Array(24).fill(0);
-            Object.keys(focusHistory).forEach(key => {
-                const arr = focusHistory[key].hourly || [];
-                for (let h = 0; h < 24; h++) {
-                    hourlyTotals[h] += (arr[h] || 0);
-                }
-            });
-
-            const maxHourlySec = Math.max(60, ...hourlyTotals);
+            const maxHourlySec = Math.max(60, ...hourlyTotals30Days);
 
             for (let h = 0; h < 24; h++) {
-                const sec = hourlyTotals[h];
+                const sec = hourlyTotals30Days[h];
                 const min = Math.floor(sec / 60);
                 const col = document.createElement('div');
                 col.className = 'hourly-bar-col';
@@ -2264,6 +2321,131 @@
             }
         }
 
+        /* [실시간 고스트 커스텀 드래그 앤 드롭: 잔상 해제 및 부드러운 스왑 배열] */
+        let draggedTodoId = null;
+        let dragGhost = null;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        function handlePointerDown(e, id, itemEl) {
+            if (e.type.startsWith('mouse') && e.button !== 0) return;
+            
+            draggedTodoId = id;
+            const rect = itemEl.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            offsetX = clientX - rect.left;
+            offsetY = clientY - rect.top;
+
+            itemEl.classList.add('is-placeholder');
+
+            dragGhost = itemEl.cloneNode(true);
+            dragGhost.classList.remove('is-placeholder');
+            dragGhost.classList.add('is-dragging-ghost');
+            dragGhost.style.width = `${rect.width}px`;
+            dragGhost.style.height = `${rect.height}px`;
+            dragGhost.style.left = `${clientX - offsetX}px`;
+            dragGhost.style.top = `${clientY - offsetY}px`;
+            document.body.appendChild(dragGhost);
+
+            document.addEventListener('touchmove', handlePointerMove, { passive: false });
+            document.addEventListener('touchend', handlePointerUp);
+            document.addEventListener('mousemove', handlePointerMove);
+            document.addEventListener('mouseup', handlePointerUp);
+        }
+
+        function handlePointerMove(e) {
+            if (!dragGhost) return;
+            e.preventDefault(); 
+
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            dragGhost.style.left = `${clientX - offsetX}px`;
+            dragGhost.style.top = `${clientY - offsetY}px`;
+
+            document.querySelectorAll('.todo-item').forEach(el => {
+                el.classList.remove('drag-over-top', 'drag-over-bottom');
+            });
+
+            dragGhost.style.display = 'none';
+            const targetEl = document.elementFromPoint(clientX, clientY);
+            dragGhost.style.display = 'flex';
+
+            const dropLi = targetEl ? targetEl.closest('.todo-item:not(.is-placeholder):not(.completed)') : null;
+            if (dropLi) {
+                const dropRect = dropLi.getBoundingClientRect();
+                if (clientY < dropRect.top + dropRect.height / 2) {
+                    dropLi.classList.add('drag-over-top');
+                } else {
+                    dropLi.classList.add('drag-over-bottom');
+                }
+            }
+        }
+
+        function handlePointerUp(e) {
+            if (!dragGhost) return;
+            
+            dragGhost.remove();
+            dragGhost = null;
+
+            const overTop = document.querySelector('.todo-item.drag-over-top');
+            const overBottom = document.querySelector('.todo-item.drag-over-bottom');
+
+            let targetId = null;
+            let position = null;
+
+            if (overTop) {
+                targetId = parseFloat(overTop.dataset.id);
+                position = 'before';
+            } else if (overBottom) {
+                targetId = parseFloat(overBottom.dataset.id);
+                position = 'after';
+            }
+
+            document.querySelectorAll('.todo-item').forEach(el => {
+                el.classList.remove('drag-over-top', 'drag-over-bottom', 'is-placeholder', 'is-dragging');
+            });
+            if (document.activeElement) document.activeElement.blur();
+
+            if (targetId && draggedTodoId) {
+                reorderTodosCustom(draggedTodoId, targetId, position);
+            } else {
+                renderTodos();
+            }
+
+            draggedTodoId = null;
+            document.removeEventListener('touchmove', handlePointerMove);
+            document.removeEventListener('touchend', handlePointerUp);
+            document.removeEventListener('mousemove', handlePointerMove);
+            document.removeEventListener('mouseup', handlePointerUp);
+        }
+
+        function reorderTodosCustom(sourceId, targetId, position) {
+            updateLastActive();
+            const uncompleted = todos.filter(t => !t.completed).sort((a, b) => a.order - b.order);
+            const sourceIdx = uncompleted.findIndex(t => t.id === sourceId);
+            const targetIdx = uncompleted.findIndex(t => t.id === targetId);
+
+            if (sourceIdx === -1 || targetIdx === -1) return;
+
+            const [movedItem] = uncompleted.splice(sourceIdx, 1);
+            let newTargetIdx = uncompleted.findIndex(t => t.id === targetId);
+
+            if (position === 'after') {
+                newTargetIdx++;
+            }
+            uncompleted.splice(newTargetIdx, 0, movedItem);
+
+            uncompleted.forEach((item, index) => {
+                item.order = index + 1;
+            });
+
+            saveState();
+            renderTodos();
+        }
+
         /* [To-Do 리스트] */
         function toggleDrawer(event) {
             updateLastActive();
@@ -2284,19 +2466,28 @@
             }
         });
 
+        // textarea 높이 조절
         function autoResizeTextarea(textarea) {
             textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 80) + 'px';
+            textarea.style.height = Math.max(38, Math.min(textarea.scrollHeight, 80)) + 'px';
+            textarea.scrollTop = 0; 
         }
 
         function handleTodoKeyDown(e) {
             if (e.isComposing) return;
+            
+            const isMobile = window.innerWidth <= 600; 
+            
             if (e.key === 'Enter') {
-                if (e.shiftKey) {
+                if (isMobile) {
                     setTimeout(() => autoResizeTextarea(e.target), 0);
                 } else {
-                    e.preventDefault();
-                    addTodo();
+                    if (e.shiftKey) {
+                        setTimeout(() => autoResizeTextarea(e.target), 0);
+                    } else {
+                        e.preventDefault();
+                        addTodo();
+                    }
                 }
             }
         }
@@ -2306,8 +2497,6 @@
             const completed = todos.filter(t => t.completed).sort((a, b) => (a.completedAt || 0) - (b.completedAt || 0));
             return [...uncompleted, ...completed];
         }
-
-        let draggedItemId = null;
 
         function renderTodos() {
             const list = document.getElementById('todo-list');
@@ -2339,38 +2528,8 @@
                 `;
 
                 if (!todo.completed) {
-                    li.draggable = false;
-                    dragHandle.onmousedown = () => { li.draggable = true; };
-                    dragHandle.onmouseup = () => { li.draggable = false; };
-
-                    dragHandle.ontouchstart = (e) => handleTouchStart(e, li, todo.id);
-                    dragHandle.ontouchmove = (e) => handleTouchMove(e);
-                    dragHandle.ontouchend = (e) => handleTouchEnd(e);
-
-                    li.ondragstart = (e) => {
-                        draggedItemId = todo.id;
-                        li.classList.add('dragging');
-                        e.dataTransfer.effectAllowed = 'move';
-                    };
-                    li.ondragend = () => {
-                        li.classList.remove('dragging');
-                        li.draggable = false;
-                        document.querySelectorAll('.todo-item').forEach(el => el.classList.remove('drag-over'));
-                    };
-                    li.ondragover = (e) => {
-                        e.preventDefault();
-                        li.classList.add('drag-over');
-                    };
-                    li.ondragleave = () => {
-                        li.classList.remove('drag-over');
-                    };
-                    li.ondrop = (e) => {
-                        e.preventDefault();
-                        li.classList.remove('drag-over');
-                        if (draggedItemId && draggedItemId !== todo.id) {
-                            reorderUncompletedTodos(draggedItemId, todo.id);
-                        }
-                    };
+                    dragHandle.addEventListener('touchstart', (e) => handlePointerDown(e, todo.id, li), { passive: false });
+                    dragHandle.addEventListener('mousedown', (e) => handlePointerDown(e, todo.id, li));
                 }
 
                 const delBtn = document.createElement('button');
@@ -2381,61 +2540,6 @@
                 li.append(chk, span, dragHandle, delBtn);
                 list.appendChild(li);
             });
-        }
-
-        let touchDragElement = null;
-        let touchDraggedId = null;
-
-        function handleTouchStart(e, li, id) {
-            touchDragElement = li;
-            touchDraggedId = id;
-            li.classList.add('dragging');
-        }
-
-        function handleTouchMove(e) {
-            if (!touchDragElement) return;
-            const touch = e.touches[0];
-            const targetEl = document.elementFromPoint(touch.clientX, touch.clientY);
-            const dropLi = targetEl ? targetEl.closest('.todo-item') : null;
-
-            document.querySelectorAll('.todo-item').forEach(el => el.classList.remove('drag-over'));
-            if (dropLi && dropLi !== touchDragElement && !dropLi.classList.contains('completed')) {
-                dropLi.classList.add('drag-over');
-            }
-        }
-
-        function handleTouchEnd(e) {
-            if (!touchDragElement) return;
-            const dropOverEl = document.querySelector('.todo-item.drag-over');
-            if (dropOverEl) {
-                const targetId = parseFloat(dropOverEl.dataset.id);
-                if (targetId && targetId !== touchDraggedId) {
-                    reorderUncompletedTodos(touchDraggedId, targetId);
-                }
-            }
-            touchDragElement.classList.remove('dragging');
-            document.querySelectorAll('.todo-item').forEach(el => el.classList.remove('drag-over'));
-            touchDragElement = null;
-            touchDraggedId = null;
-        }
-
-        function reorderUncompletedTodos(sourceId, targetId) {
-            updateLastActive();
-            const uncompleted = todos.filter(t => !t.completed).sort((a, b) => a.order - b.order);
-            const sourceIdx = uncompleted.findIndex(t => t.id === sourceId);
-            const targetIdx = uncompleted.findIndex(t => t.id === targetId);
-
-            if (sourceIdx === -1 || targetIdx === -1) return;
-
-            const [movedItem] = uncompleted.splice(sourceIdx, 1);
-            uncompleted.splice(targetIdx, 0, movedItem);
-
-            uncompleted.forEach((item, index) => {
-                item.order = index + 1;
-            });
-
-            saveState();
-            renderTodos();
         }
 
         function addTodo() {
@@ -2455,6 +2559,13 @@
 
             input.value = '';
             input.style.height = '38px';
+            input.focus();
+            
+            setTimeout(() => {
+                input.scrollTop = 0;
+                autoResizeTextarea(input);
+            }, 0);
+            
             saveState();
             renderTodos();
         }
